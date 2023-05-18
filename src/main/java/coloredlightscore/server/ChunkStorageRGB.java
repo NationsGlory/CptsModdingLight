@@ -1,7 +1,5 @@
 package coloredlightscore.server;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,9 +7,13 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
+
 /**
  * Methods for loading/saving RGB data to/from world save
- * 
+ *
  * @author heaton84
  */
 public class ChunkStorageRGB {
@@ -21,7 +23,7 @@ public class ChunkStorageRGB {
     /**
      * Constructs a NibbleArray from a raw stream of byte data. If the
      * byte data is incomplete, returns an empty array.
-     * 
+     *
      * @param rawdata The raw bytestream to build an array from.
      * @return Instance of a NibbleArray.
      */
@@ -29,7 +31,7 @@ public class ChunkStorageRGB {
         if (rawdata.length == 0) {
             return new NibbleArray(4096, 4);
         } else if (rawdata.length < 2048) {
-            CLLog.warn("checkedGetNibbleArray: rawdata is too short: {}, expected 2048", rawdata.length);
+            CLLog.log(Level.WARNING, "checkedGetNibbleArray: rawdata is too short: {}, expected 2048", rawdata.length);
             return new NibbleArray(4096, 4);
         } else
             return new NibbleArray(rawdata, 4);
@@ -37,9 +39,9 @@ public class ChunkStorageRGB {
 
     /**
      * Loads RGB color data from a world store, if present.
-     * 
+     *
      * @param chunk The chunk to populate with data
-     * @param data Top-level NBTTag, must contain "Level" tag.
+     * @param data  Top-level NBTTag, must contain "Level" tag.
      * @return true if color data was loaded, false if not present or an error was encountered
      */
     public static boolean loadColorData(Chunk chunk, NBTTagCompound data) {
@@ -48,11 +50,11 @@ public class ChunkStorageRGB {
         NibbleArray bColorArray;
         ExtendedBlockStorage[] chunkStorageArrays = chunk.getBlockStorageArray();
         NBTTagCompound level = data.getCompoundTag("Level");
-        NBTTagList nbttaglist = level.getTagList("Sections", 10);
+        NBTTagList nbttaglist = level.getTagList("Sections");
         boolean foundColorData = false;
 
         for (int k = 0; k < nbttaglist.tagCount(); ++k) {
-            NBTTagCompound nbtYCompound = nbttaglist.getCompoundTagAt(k);
+            NBTTagCompound nbtYCompound = (NBTTagCompound) nbttaglist.tagAt(k);
 
             if (chunkStorageArrays[k] != null) {
                 if (nbtYCompound.hasKey("RedColorArray")) //, 7))
@@ -81,7 +83,7 @@ public class ChunkStorageRGB {
 
     /**
      * Loads RGB color data from a world store, if present.
-     * 
+     *
      * @param chunk The chunk to populate with data
      * @return true if color data was loaded, false if not present or an error was encountered
      */
@@ -95,7 +97,7 @@ public class ChunkStorageRGB {
         for (int k = 0; k < arraySize; ++k) {
             if (chunkStorageArrays[k] != null) {
                 if (chunkStorageArrays[k].getYLocation() != yLocation[k])
-                    CLLog.error("EBS DATA OUT OF SEQUENCE. Expected {}, got {}", chunkStorageArrays[k].getYLocation(), yLocation[k]);
+                    CLLog.log(Level.SEVERE, "EBS DATA OUT OF SEQUENCE. Expected {}, got {}", new Object[]{chunkStorageArrays[k].getYLocation(), yLocation[k]});
 
                 rColorArray = redColorData[k];
                 gColorArray = greenColorData[k];
@@ -120,9 +122,9 @@ public class ChunkStorageRGB {
 
     /**
      * Saves RGB color data into world store NBTTag data. Should be called before chunk is saved.
-     * 
+     *
      * @param chunk The chunk to extract RGB color data from.
-     * @param data Top-level NBTTag, must contain "Level" tag.
+     * @param data  Top-level NBTTag, must contain "Level" tag.
      * @return true if color data was saved, false if an error was encountered
      */
     public static boolean saveColorData(Chunk chunk, NBTTagCompound data) {
@@ -131,11 +133,11 @@ public class ChunkStorageRGB {
         NibbleArray bColorArray;
         ExtendedBlockStorage[] chunkStorageArrays = chunk.getBlockStorageArray();
         NBTTagCompound level = data.getCompoundTag("Level");
-        NBTTagList nbttaglist = level.getTagList("Sections", 10);
+        NBTTagList nbttaglist = level.getTagList("Sections");
 
         for (int k = 0; k < chunkStorageArrays.length; k++) {
             if (chunkStorageArrays[k] != null) {
-                NBTTagCompound nbtYCompound = nbttaglist.getCompoundTagAt(k);
+                NBTTagCompound nbtYCompound = (NBTTagCompound) nbttaglist.tagAt(k);
 
                 // Add our RGB arrays to it
                 rColorArray = chunkStorageArrays[k].getRedColorArray();
@@ -166,7 +168,7 @@ public class ChunkStorageRGB {
 
     /**
      * Extracts all the red color arrays from a chunk's extended block storage
-     * 
+     *
      * @param chunk
      * @return An array of NibbleArrays containing red color data for the chunk
      */
@@ -188,7 +190,7 @@ public class ChunkStorageRGB {
 
     /**
      * Extracts all the green color arrays from a chunk's extended block storage
-     * 
+     *
      * @param chunk
      * @return An array of NibbleArrays containing green color data for the chunk
      */
@@ -211,7 +213,7 @@ public class ChunkStorageRGB {
 
     /**
      * Extracts all the blue color arrays from a chunk's extended block storage
-     * 
+     *
      * @param chunk
      * @return An array of NibbleArrays containing blue color data for the chunk
      */

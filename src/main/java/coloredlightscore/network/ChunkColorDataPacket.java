@@ -1,23 +1,22 @@
 package coloredlightscore.network;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import io.netty.buffer.ByteBuf;
-
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.chunk.Chunk;
-import cpw.mods.fml.common.FMLCommonHandler;
-import net.minecraft.world.chunk.NibbleArray;
 import coloredlightscore.server.ChunkStorageRGB;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.NibbleArray;
+
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColorDataPacket, IMessage> {
 

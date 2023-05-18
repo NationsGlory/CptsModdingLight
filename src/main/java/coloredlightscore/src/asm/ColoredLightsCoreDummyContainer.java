@@ -1,29 +1,29 @@
 package coloredlightscore.src.asm;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
+import coloredlightscore.fmlevents.ChunkDataEventHandler;
+import coloredlightscore.network.PacketHandler;
+import coloredlightscore.src.api.CLApi;
+import coloredlightscore.src.helper.CLEntityRendererHelper;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import cpw.mods.fml.common.DummyModContainer;
+import cpw.mods.fml.common.LoadController;
+import cpw.mods.fml.common.ModMetadata;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.logging.Level;
 
-import cpw.mods.fml.common.*;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.relauncher.*;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.MinecraftForge;
-import coloredlightscore.fmlevents.ChunkDataEventHandler;
-import coloredlightscore.network.PacketHandler;
-import coloredlightscore.src.api.CLApi;
-import coloredlightscore.src.helper.CLEntityRendererHelper;
-
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
-
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class ColoredLightsCoreDummyContainer extends DummyModContainer {
     public ChunkDataEventHandler chunkDataEventHandler;
@@ -81,16 +81,16 @@ public class ColoredLightsCoreDummyContainer extends DummyModContainer {
         }
 
         // Inject RGB values into vanilla blocks		
-        Blocks.lava.lightValue = CLApi.makeRGBLightValue(15, 10, 0);
+        Block.lightValue[Block.lavaStill.blockID] = CLApi.makeRGBLightValue(15, 10, 0);
 
-        Blocks.flowing_lava.lightValue = CLApi.makeRGBLightValue(15, 10, 0);
-        Blocks.torch.lightValue = CLApi.makeRGBLightValue(14, 13, 10);
-        Blocks.fire.lightValue = CLApi.makeRGBLightValue(15, 13, 0);
-        Blocks.lit_redstone_ore.lightValue = CLApi.makeRGBLightValue(9, 0, 0);
-        Blocks.redstone_torch.lightValue = CLApi.makeRGBLightValue(7, 0, 0);
-        Blocks.portal.lightValue = CLApi.makeRGBLightValue(6, 3, 11);
-        Blocks.lit_furnace.lightValue = CLApi.makeRGBLightValue(13, 12, 10);
-        Blocks.powered_repeater.lightValue = CLApi.makeRGBLightValue(9, 0, 0);
+        Block.lightValue[Block.lavaMoving.blockID] = CLApi.makeRGBLightValue(15, 10, 0);
+        Block.lightValue[Block.torchWood.blockID] = CLApi.makeRGBLightValue(14, 13, 10);
+        Block.lightValue[Block.fire.blockID] = CLApi.makeRGBLightValue(15, 13, 0);
+        Block.lightValue[Block.oreRedstoneGlowing.blockID] = CLApi.makeRGBLightValue(9, 0, 0);
+        Block.lightValue[Block.torchRedstoneActive.blockID] = CLApi.makeRGBLightValue(7, 0, 0);
+        Block.lightValue[Block.portal.blockID] = CLApi.makeRGBLightValue(6, 3, 11);
+        Block.lightValue[Block.furnaceBurning.blockID] = CLApi.makeRGBLightValue(13, 12, 10);
+        Block.lightValue[Block.redstoneRepeaterActive.blockID] = CLApi.makeRGBLightValue(9, 0, 0);
 
         Object thisShouldBeABlock;
         int l;
@@ -98,10 +98,11 @@ public class ColoredLightsCoreDummyContainer extends DummyModContainer {
         while (blockRegistryInterator.hasNext()) {
             thisShouldBeABlock = blockRegistryInterator.next();
             if (thisShouldBeABlock instanceof Block) {
-                l = ((Block)thisShouldBeABlock).lightValue;
+                Block block = (Block) thisShouldBeABlock;
+                l = Block.lightValue[block.blockID];
                 if ((l > 0) && (l <= 0xF)) {
-                    CLLog.info(((Block)thisShouldBeABlock).getLocalizedName() + "has light:" + l + ", but no color");
-                    ((Block)thisShouldBeABlock).lightValue = (l<<15) | (l<<10) | (l<<5) | l; //copy vanilla brightness into each color component to make it white/grey.
+                    CLLog.info(((Block) thisShouldBeABlock).getLocalizedName() + "has light:" + l + ", but no color");
+                    Block.lightValue[block.blockID] = (l << 15) | (l << 10) | (l << 5) | l; //copy vanilla brightness into each color component to make it white/grey.
                 }
             }
         }
@@ -115,10 +116,10 @@ public class ColoredLightsCoreDummyContainer extends DummyModContainer {
         } catch (ClassNotFoundException e) {
             CLLog.info("Dynamic Lights not found");
         } catch (NoSuchFieldException e) {
-            CLLog.error("Missing field named \"instance\" in DynamicLights. Did versions change?");
+            CLLog.log(Level.SEVERE, "Missing field named \"instance\" in DynamicLights. Did versions change?");
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            CLLog.error("We were denied access to the field \"instance\" in DynamicLights :(  Did versions change?");
+            CLLog.log(Level.SEVERE, "We were denied access to the field \"instance\" in DynamicLights :(  Did versions change?");
             e.printStackTrace();
         }
 
@@ -128,7 +129,7 @@ public class ColoredLightsCoreDummyContainer extends DummyModContainer {
             try {
                 getDynamicLight = DynamicLightsClazz.getDeclaredMethod("getLightValue", IBlockAccess.class, Block.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
             } catch (NoSuchMethodException e) {
-                CLLog.error("Missing method named \"getLightValue\" in DynamicLightsClazz. Did versions change?");
+                CLLog.log(Level.SEVERE, "Missing method named \"getLightValue\" in DynamicLightsClazz. Did versions change?");
                 e.printStackTrace();
             }
         }

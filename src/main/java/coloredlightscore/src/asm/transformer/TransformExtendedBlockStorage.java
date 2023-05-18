@@ -1,44 +1,35 @@
 package coloredlightscore.src.asm.transformer;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
-
 import coloredlightscore.src.asm.transformer.core.ASMUtils;
 import coloredlightscore.src.asm.transformer.core.MethodTransformer;
 import coloredlightscore.src.asm.transformer.core.NameMapper;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.*;
+
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 /**
  * Fields added to net.minecraft.world.chunk.storage.ExtendedBlockStorage:
- *   NibbleArray rColorArray
- *   NibbleArray gColorArray
- *   NibbleArray bColorArray
- *   
+ * NibbleArray rColorArray
+ * NibbleArray gColorArray
+ * NibbleArray bColorArray
+ * <p>
  * Methods added to net.minecraft.world.chunk.storage.ExtendedBlockStorage:
- *   setRedColorArray
- *   setGreenColorArray
- *   setBlueColorArray
- *   getRedColorArray
- *   getGreenColorArray
- *   getBlueColorArray
- * 
+ * setRedColorArray
+ * setGreenColorArray
+ * setBlueColorArray
+ * getRedColorArray
+ * getGreenColorArray
+ * getBlueColorArray
+ * <p>
  * Methods modified on net.minecraft.world.chunk.storage.ExtendedBlockStorage:
- *   setExtBlocklightValue
- *   getExtBlocklightValue
- * 
- * @author Josh
+ * setExtBlocklightValue
+ * getExtBlocklightValue
  *
+ * @author Josh
  */
 public class TransformExtendedBlockStorage extends MethodTransformer {
 
@@ -114,7 +105,7 @@ public class TransformExtendedBlockStorage extends MethodTransformer {
                 blockLSBArray = f;
 
         if (blockLSBArray == null)
-            CLLog.error("TransformExtendedBlockStorage: Failed to find blockLSBArray!");
+            CLLog.log(Level.SEVERE, "TransformExtendedBlockStorage: Failed to find blockLSBArray!");
 
         rColorArray = new FieldNode(Opcodes.ACC_PUBLIC, "rColorArray", typeNibbleArray.getDescriptor(), null, null);
         gColorArray = new FieldNode(Opcodes.ACC_PUBLIC, "gColorArray", typeNibbleArray.getDescriptor(), null, null);
@@ -168,7 +159,7 @@ public class TransformExtendedBlockStorage extends MethodTransformer {
         AbstractInsnNode returnNode = ASMUtils.findLastReturn(m);
 
         if (returnNode == null) {
-            CLLog.error(String.format("Failed to find RETURN statement on {}/{} {}", clazz.name, m.name, m.desc));
+            CLLog.log(Level.SEVERE, String.format("Failed to find RETURN statement on {}/{} {}", clazz.name, m.name, m.desc));
         } else
             m.instructions.remove(returnNode);
 

@@ -1,22 +1,22 @@
 package yamhaven.easycoloredlights.blocks;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import yamhaven.easycoloredlights.lib.BlockInfo;
-import yamhaven.easycoloredlights.lib.ModInfo;
 import coloredlightscore.src.api.CLApi;
 import coloredlightscore.src.api.CLBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.world.World;
+import yamhaven.easycoloredlights.lib.BlockInfo;
+import yamhaven.easycoloredlights.lib.ModInfo;
+
+import java.util.List;
+import java.util.Random;
 
 public class CLLamp extends CLBlock {
     /** Whether this lamp block is the powered version of the block. */
@@ -29,10 +29,10 @@ public class CLLamp extends CLBlock {
         this.powered = isPowered;
 
         setHardness(0.3F);
-        setStepSound(soundTypeGlass);
+        setStepSound(Block.soundGlassFootstep);
 
         if (isPowered)
-            setLightLevel(1.0F);
+            setLightValue(1.0F);
         else
             setCreativeTab(CreativeTabs.tabDecorations);
     }
@@ -42,12 +42,12 @@ public class CLLamp extends CLBlock {
     }
 
     @SideOnly(Side.CLIENT)
-    private IIcon icons[];
+    private Icon icons[];
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) { //registerIcons()
-        icons = new IIcon[16];
+    public void registerIcons(IconRegister iconRegister) { //registerIcons()
+        icons = new Icon[16];
         for (int i = 0; i < icons.length; i++) {
             icons[i] = iconRegister.registerIcon(ModInfo.ID + ":" + BlockInfo.CLLamp + (powered ? "On" : "") + i);
         }
@@ -55,7 +55,7 @@ public class CLLamp extends CLBlock {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public IIcon getIcon(int side, int meta) {
+    public Icon getIcon(int side, int meta) {
         return icons[meta];
     }
     
@@ -64,13 +64,9 @@ public class CLLamp extends CLBlock {
         return "tile." + BlockInfo.CLLamp;
     }
 
-    @SideOnly(Side.CLIENT)
-    public Item getItem(World world, int x, int y, int z) {
-        return Item.getItemFromBlock((powered) ? switchBlock : this);
-    }
-
-    public Item getItemDropped(int par1, Random par2Random, int par3) {
-        return Item.getItemFromBlock((powered) ? switchBlock : this);
+    @Override
+    public int idDropped(int par1, Random par2Random, int par3) {
+        return (powered) ? switchBlock.blockID : this.blockID;
     }
 
     protected ItemStack createStackedBlock(int meta) {
@@ -84,10 +80,10 @@ public class CLLamp extends CLBlock {
     public void onBlockAdded(World world, int x, int y, int z) {
         if (!world.isRemote) {
             if (this.powered && !world.isBlockIndirectlyGettingPowered(x, y, z)) {
-                world.scheduleBlockUpdate(x, y, z, this, 4);
+                world.scheduleBlockUpdate(x, y, z, this.blockID, 4);
             } else if (!this.powered && world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 int temp = world.getBlockMetadata(x, y, z);
-                world.setBlock(x, y, z, switchBlock, 0, 0);
+                world.setBlock(x, y, z, switchBlock.blockID, 0, 0);
                 world.setBlockMetadataWithNotify(x, y, z, temp, 2);
             }
         }
@@ -97,13 +93,13 @@ public class CLLamp extends CLBlock {
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor blockID
      */
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World world, int x, int y, int z, int block) {
         if (!world.isRemote) {
             if (this.powered && !world.isBlockIndirectlyGettingPowered(x, y, z)) {
-                world.scheduleBlockUpdate(x, y, z, this, 4);
+                world.scheduleBlockUpdate(x, y, z, this.blockID, 4);
             } else if (!this.powered && world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 int temp = world.getBlockMetadata(x, y, z);
-                world.setBlock(x, y, z, switchBlock, 0, 0);
+                world.setBlock(x, y, z, switchBlock.blockID, 0, 0);
                 world.setBlockMetadataWithNotify(x, y, z, temp, 2);
             }
         }
@@ -116,7 +112,7 @@ public class CLLamp extends CLBlock {
     public void updateTick(World world, int x, int y, int z, Random random) {
         if (!world.isRemote && this.powered && !world.isBlockIndirectlyGettingPowered(x, y, z)) {
             int temp = world.getBlockMetadata(x, y, z);
-            world.setBlock(x, y, z, switchBlock, 0, 0);
+            world.setBlock(x, y, z, switchBlock.blockID, 0, 0);
             world.setBlockMetadataWithNotify(x, y, z, temp, 2);
         }
     }
@@ -129,11 +125,13 @@ public class CLLamp extends CLBlock {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < 16; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
     }
+
+
 
     @Override
     public int getColorLightValue(int meta) {

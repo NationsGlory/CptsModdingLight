@@ -168,7 +168,7 @@ public class CLApi {
      * @return Reference to the block passed in.
      */
     public static Block setBlockColorRGB(Block block, int r, int g, int b) {
-        block.setLightLevel(((float)makeRGBLightValue(r, g, b))/15F);
+        block.setLightValue(((float)makeRGBLightValue(r, g, b))/15F);
         return block;
     }
 
@@ -182,7 +182,7 @@ public class CLApi {
      * @return Reference to the block passed in.
      */
     public static Block setBlockColorRGB(Block block, float r, float g, float b) {
-        block.setLightLevel(((float)makeRGBLightValue(r, g, b))/15F);
+        block.setLightValue(((float)makeRGBLightValue(r, g, b))/15F);
         return block;
     }
 
@@ -200,7 +200,7 @@ public class CLApi {
      */
     @Deprecated
     public static Block setBlockColorRGB(Block block, int r, int g, int b, int lightValue) {
-        block.setLightLevel(((float)makeRGBLightValue(r, g, b, lightValue))/15F);
+        block.setLightValue(((float)makeRGBLightValue(r, g, b, lightValue))/15F);
         return block;
     }
 
@@ -218,7 +218,7 @@ public class CLApi {
      */
     @Deprecated
     public static Block setBlockColorRGB(Block block, float r, float g, float b, float lightValue) {
-        block.setLightLevel(((float)makeRGBLightValue(r, g, b, lightValue))/15F);
+        block.setLightValue(((float)makeRGBLightValue(r, g, b, lightValue))/15F);
         return block;
     }
 

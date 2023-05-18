@@ -1,132 +1,37 @@
 buildscript {
     repositories {
-        mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = "http://maven.nationsglory.fr/releases"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-        classpath 'org.ajoberstar:gradle-git:0.10.1'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-NGWascar-rev3'
     }
 }
 
 apply plugin: 'forge'
-apply plugin: 'maven-publish'
 
-
-import org.ajoberstar.grgit.Grgit
-
-def repo = Grgit.open(project.file('.'))
-project.ext.gitHash = repo.log().find().abbreviatedId
-
-boolean dev = project.hasProperty('clc_dev') && project.clc_dev.equalsIgnoreCase('true')
-
-ext.buildnumber = 0
-project.buildnumber = !dev && System.getenv('BUILD_NUMBER') != null ? System.getenv('BUILD_NUMBER') : project.ext.gitHash
-
-version = "${mod_version}.${buildnumber}"
-
-group= "coloredlightscore"
-archivesBaseName = "ColoredLightsCore"
+version = "1.0"
+group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "CptsModdingLight"
 
 minecraft {
-    version = "${minecraft_version}-${forge_version}"
-    runDir = "run"
-
-    replaceIn "ColoredLightsCoreDummyContainer.java"
-    replace "@VERSION@", project.version
+	version = "1.6.4-9.11.1.964"
 }
 
-repositories {
-    maven {
-        name 'Chicken Bones Repo'
-        url "http://chickenbones.net/maven/"
-    }
-}
-
-dependencies {
-    compile "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:dev"
-    compile "codechicken:CodeChickenCore:${minecraft_version}-${ccc_version}:dev"
-    //compile "codechicken:NotEnoughItems:${minecraft_version}-${nei_version}:dev"
-    //compile "codechicken:ForgeMultipart:${minecraft_version}-${fmp_version}:dev"
-}
-
-jar {
-  manifest {
-    attributes('FMLCorePlugin': 'coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin')
-    attributes('FMLCorePluginContainsFMLMod': 'true')
-  }
-}
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
+processResources
+{
     // replace stuff in mcmod.info, nothing else
-    from (sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod/info'
+                
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-
+        
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
-
-tasks.build.dependsOn('sourceJar', 'deobfJar')
-
-// Create deobf dev jars
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-// Create API jar with sources and compiled files
-task apiJar(type: Jar) {
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-    include 'coloredlightscore/src/api/**/*'
-    classifier = 'api'
-}
-
-// Create source attachment for dev jar
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier = 'source'
-}
-
-artifacts {
-    archives deobfJar
-    archives sourceJar
-    archives apiJar
-}
-
-publishing {
-    tasks.publish.dependsOn 'build'
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-            artifact deobfJar
-            artifact sourceJar
-            artifact apiJar
-        }
-    }
-
-    repositories {
-        String prop = dev ? "clc_dev_mavendir" : "clc_mavendir"
-        if (project.hasProperty(prop)) {
-            maven { url project.getProperty(prop) }
-        }
-    }
-}
-

@@ -100,7 +100,7 @@ public class TransformEntityRenderer extends HelperMethodTransformer {
             if (insn.getOpcode() == Opcodes.NEW && !found2DLightmap) {
                 if (((TypeInsnNode) insn).desc.equals(oldLightmapDesc)) {
                     
-                    CLLog.debug("Replacing 2D lightmap texture");
+                    CLLog.fine("Replacing 2D lightmap texture");
                     insn = it.next(); //DUP
                     insn = it.next(); //BIPUSH 16
                     it.set(new LdcInsnNode(256));

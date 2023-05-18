@@ -1,21 +1,21 @@
 package coloredlightscore.src.asm.transformer.core;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
+import com.google.common.base.Throwables;
 import net.minecraft.launchwrapper.IClassTransformer;
-
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
-import com.google.common.base.Throwables;
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 /**
- * The SelectiveTransformer.class was based on code written by diesieben07, 
+ * The SelectiveTransformer.class was based on code written by diesieben07,
  * who has given express permission for its use in our code.
- * 
+ * <p>
  * diesieben07's code had not been classified under the GPL license at the time
  * before we had obtained a copy.
- * 
+ * <p>
  * Source: https://github.com/diesieben07/SevenCommons/tree/master/src/main/java/de/take_weiland/mods/commons
  */
 
@@ -23,7 +23,7 @@ public abstract class SelectiveTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (bytes != null && transforms(transformedName)) {
-            CLLog.info("Class {} is a candidate for transforming", transformedName);
+            CLLog.log(Level.INFO, "Class {} is a candidate for transforming", transformedName);
 
             try {
                 ClassNode clazz = ASMUtils.getClassNode(bytes);
@@ -33,9 +33,9 @@ public abstract class SelectiveTransformer implements IClassTransformer {
                     clazz.accept(writer);
                     bytes = writer.toByteArray();
                 } else
-                    CLLog.warn("Did not transform {}", transformedName);
+                    CLLog.log(Level.WARNING, "Did not transform {}", transformedName);
             } catch (Exception e) {
-                CLLog.error("Exception during transformation of class " + transformedName);
+                CLLog.log(Level.SEVERE, "Exception during transformation of class " + transformedName);
                 e.printStackTrace();
                 Throwables.propagate(e);
             }

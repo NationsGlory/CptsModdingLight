@@ -1,13 +1,13 @@
 package coloredlightscore.src.asm;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import coloredlightscore.src.asm.transformer.*;
 import coloredlightscore.src.asm.transformer.core.NameMapper;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.*;
-import org.apache.logging.log4j.*;
 
 @TransformerExclusions("coloredlightscore.*")
 @MCVersion("1.7.10")
@@ -17,7 +17,7 @@ public class ColoredLightsCoreLoadingPlugin implements IFMLLoadingPlugin {
     public static LaunchClassLoader CLASSLOADER;
     public static boolean MCP_ENVIRONMENT;
 
-    public static org.apache.logging.log4j.Logger CLLog = LogManager.getLogger("coloredlightscore");
+    public static Logger CLLog = Logger.getLogger("coloredlightscore");
 
     @Override
     public String[] getASMTransformerClass() {
@@ -53,10 +53,5 @@ public class ColoredLightsCoreLoadingPlugin implements IFMLLoadingPlugin {
         MCP_ENVIRONMENT = !((Boolean) data.get("runtimeDeobfuscationEnabled")).booleanValue();
         NameMapper.getInstance().setObfuscated(!MCP_ENVIRONMENT);
         CLASSLOADER = (LaunchClassLoader) data.get("classLoader");
-    }
-
-    @Override
-    public String getAccessTransformerClass() {
-        return ColoredLightsCoreAccessTransformer.class.getName();
     }
 }

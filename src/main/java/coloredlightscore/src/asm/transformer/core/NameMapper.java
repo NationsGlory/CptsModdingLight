@@ -1,11 +1,12 @@
 package coloredlightscore.src.asm.transformer.core;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import java.util.HashMap;
-
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
+
+import java.util.HashMap;
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 //TODO: trianglecube36: less string operations, more support for more types
 //EPIC IDEA: 1. create a dummy function that calls EVERYTHING that we need to override/modify with asm
@@ -19,13 +20,13 @@ public class NameMapper {
     private boolean MCP_ENVIRONMENT = false;
 
     public static NameMapper getInstance() {
-        if (INSTANCE == null){
+        if (INSTANCE == null) {
             INSTANCE = new NameMapper();
         }
 
         return INSTANCE;
     }
-    
+
     /* Used when directly transforming some values */
     public static String drawSignature = "draw ()I";
     public static String obfDrawSignature = "func_78381_a ()I";
@@ -101,7 +102,7 @@ public class NameMapper {
         registerSrgName("MD: net/minecraft/client/renderer/Tessellator/setBrightness (I)V net/minecraft/client/renderer/Tessellator/func_78380_c (I)V");
         registerSrgName("MD: net/minecraft/client/renderer/Tessellator/addVertex (DDD)V net/minecraft/client/renderer/Tessellator/func_78377_a (DDD)V");
         registerSrgName("MD: net/minecraft/client/renderer/Tessellator/draw ()I net/minecraft/client/renderer/Tessellator/func_78381_a ()I");
-        
+
         // World
         registerSrgName("CL: net/minecraft/world/World net/minecraft/world/World");
         registerSrgName("MD: net/minecraft/world/World/getBlockLightValue_do (IIIZ)I net/minecraft/world/World/func_72849_a (IIIZ)I");
@@ -137,12 +138,12 @@ public class NameMapper {
 
     public void setObfuscated(boolean obfuscated) {
         MCP_ENVIRONMENT = !obfuscated;
-        CLLog.debug("ColoredLightsCore: MCP_ENVIRONMENT={}", MCP_ENVIRONMENT);
+        CLLog.log(Level.FINE, "ColoredLightsCore: MCP_ENVIRONMENT={}", MCP_ENVIRONMENT);
     }
 
     /**
      * Returns the appropriate obfuscated or unobfuscated class name for a Minecraft class
-     * 
+     *
      * @param className De-obfuscated class name, in either dot or internal format.
      * @return
      */
@@ -156,9 +157,9 @@ public class NameMapper {
     /**
      * Given a method name in path/to/class/methodname or path.to.class.methodname format
      * Returns proper method name in path/to/class/methodname format
-     * 
-     * @param ownerName The de-obfuscated class that contains the method (dot or internal format OK)
-     * @param methodName The de-obfuscated name of the method
+     *
+     * @param ownerName       The de-obfuscated class that contains the method (dot or internal format OK)
+     * @param methodName      The de-obfuscated name of the method
      * @param methodSignature The de-obfuscated signature of the method
      * @return The obfuscated/unobfuscated name based on MCP_ENVIRONMENT
      */
@@ -178,8 +179,8 @@ public class NameMapper {
     /**
      * Given a method name in path/to/class/methodname or path.to.class.methodname format
      * Returns method descriptor
-     * 
-     * @param ownerName The de-obfuscated class that contains the method (dot or internal format OK)
+     *
+     * @param ownerName               The de-obfuscated class that contains the method (dot or internal format OK)
      * @param methodNameAndDescriptor The de-obfuscated name of the method with descriptor
      * @return The obfuscated/unobfuscated descriptor based on MCP_ENVIRONMENT
      */
@@ -199,9 +200,9 @@ public class NameMapper {
     /**
      * Given a method name in path/to/class/methodname or path.to.class.methodname format
      * Returns method descriptor
-     * 
-     * @param ownerName The de-obfuscated class that contains the method (dot or internal format OK)
-     * @param methodName The de-obfuscated name of the method
+     *
+     * @param ownerName       The de-obfuscated class that contains the method (dot or internal format OK)
+     * @param methodName      The de-obfuscated name of the method
      * @param methodSignature The de-obfuscated signature of the method
      * @return The obfuscated/unobfuscated descriptor based on MCP_ENVIRONMENT
      */
@@ -215,8 +216,8 @@ public class NameMapper {
     /**
      * Given a method name in path/to/class/methodname or path.to.class.methodname format
      * Returns method descriptor
-     * 
-     * @param ownerName The de-obfuscated class that contains the method (dot or internal format OK)
+     *
+     * @param ownerName               The de-obfuscated class that contains the method (dot or internal format OK)
      * @param methodNameAndDescriptor The de-obfuscated name of the method with descriptor
      * @return The obfuscated/unobfuscated descriptor based on MCP_ENVIRONMENT
      */
@@ -230,10 +231,10 @@ public class NameMapper {
 
     /**
      * Determines if methodNode matches the specified method name and signature
-     * 
-     * @param methodNode Node to test
-     * @param ownerName The de-obfuscated owner class of the method to test for
-     * @param methodNameWithSignature The de-obfuscated method WITH signature to test for (eg: "setLightLevel (F)Lnet/minecraft/block/Block;") 
+     *
+     * @param methodNode              Node to test
+     * @param ownerName               The de-obfuscated owner class of the method to test for
+     * @param methodNameWithSignature The de-obfuscated method WITH signature to test for (eg: "setLightLevel (F)Lnet/minecraft/block/Block;")
      * @return
      */
     public boolean isMethod(MethodNode methodNode, String ownerName, String methodNameWithSignature) {
@@ -261,8 +262,8 @@ public class NameMapper {
     /**
      * Given a JVM method/type descriptor such as "(Ljava/util/ArrayList;Lnet/minecraft/entity/player/EntityPlayerMP;)V",
      * returns an obfuscated descriptor like "(Ljava/util/ArrayList;Lmm;)V". Note: This method will return the
-     * deobfuscated descriptor if running in Eclipse (MCP_ENVIRONMENT=true) 
-     * 
+     * deobfuscated descriptor if running in Eclipse (MCP_ENVIRONMENT=true)
+     *
      * @param descriptor The descriptor to decode
      * @return The proper descriptor
      */
@@ -299,11 +300,10 @@ public class NameMapper {
     /**
      * Given a deobfuscated type, returns the appropriate obfuscated/deobfuscated name ready to use
      * in transformer code.
-     * 
-     * @author heaton84
-     * 
+     *
      * @param deobfuscatedTypeDescriptor Eg: "net.minecraft.world.chunk.NibbleArray"
      * @return Deobfuscated name if running in eclipse. Obfuscated if running in production.
+     * @author heaton84
      */
     public Type getType(String deobfuscatedTypeDescriptor) {
         String internalName = internalizeName(deobfuscatedTypeDescriptor);

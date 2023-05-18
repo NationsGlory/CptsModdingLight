@@ -1,18 +1,14 @@
 package coloredlightscore.src.asm.transformer;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
-
 import coloredlightscore.src.asm.transformer.core.ASMUtils;
 import coloredlightscore.src.asm.transformer.core.MethodTransformer;
 import coloredlightscore.src.asm.transformer.core.NameMapper;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
+
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class TransformEntityPlayerMP extends MethodTransformer {
 
@@ -49,7 +45,7 @@ public class TransformEntityPlayerMP extends MethodTransformer {
                 method.instructions.insert(insertionPoint.getNext(), helperInvoke);
                 return true;
             } else {
-                CLLog.error("TransformEntityPlayerMP.transform()  Could not find INVOKESPECIAL to S26PacketMapChunkBulk constructor!");
+                CLLog.log(Level.SEVERE, "TransformEntityPlayerMP.transform()  Could not find INVOKESPECIAL to S26PacketMapChunkBulk constructor!");
                 ASMUtils.findLastInvoke(method, Opcodes.INVOKESPECIAL, "net/minecraft/network/play/server/S26PacketMapChunkBulk", "<init> (Ljava/util/List;)V", true);
             }
 

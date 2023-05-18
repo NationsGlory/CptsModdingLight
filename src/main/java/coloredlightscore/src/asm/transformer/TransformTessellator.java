@@ -1,20 +1,19 @@
 package coloredlightscore.src.asm.transformer;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import java.util.ListIterator;
-
 import coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
-
 import coloredlightscore.src.asm.transformer.core.ASMUtils;
 import coloredlightscore.src.asm.transformer.core.ExtendedClassWriter;
 import coloredlightscore.src.asm.transformer.core.HelperMethodTransformer;
 import coloredlightscore.src.asm.transformer.core.NameMapper;
-
 import com.google.common.base.Throwables;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
+
+import java.util.ListIterator;
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class TransformTessellator extends HelperMethodTransformer {
     String unObfBrightness = "hasBrightness";
@@ -26,7 +25,7 @@ public class TransformTessellator extends HelperMethodTransformer {
     boolean byteBufferIsStatic = false;
 
     // These methods will be replaced by statics in CLTessellatorHelper
-    String methodsToReplace[] = { "addVertex (DDD)V" };
+    String methodsToReplace[] = {"addVertex (DDD)V"};
     String constructorToReplace = "<clinit> ()V";
 
 
@@ -37,7 +36,7 @@ public class TransformTessellator extends HelperMethodTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (bytes != null && transforms(transformedName)) {
-            CLLog.info("Class {} is a candidate for transforming", transformedName);
+            CLLog.log(Level.INFO, "Class {} is a candidate for transforming", transformedName);
 
             try {
                 ClassNode clazz = ASMUtils.getClassNode(bytes);
@@ -48,9 +47,9 @@ public class TransformTessellator extends HelperMethodTransformer {
                     clazz.accept(writer);
                     bytes = writer.toByteArray();
                 } else
-                    CLLog.warn("Did not transform {}", transformedName);
+                    CLLog.log(Level.WARNING, "Did not transform {}", transformedName);
             } catch (Exception e) {
-                CLLog.error("Exception during transformation of class " + transformedName);
+                CLLog.log(Level.SEVERE, "Exception during transformation of class " + transformedName);
                 e.printStackTrace();
                 Throwables.propagate(e);
             }
@@ -128,7 +127,7 @@ public class TransformTessellator extends HelperMethodTransformer {
         }
 
         if (NameMapper.getInstance().isMethod(methodNode, super.className, "draw ()I")) {
-        	return transformDraw(methodNode);
+            return transformDraw(methodNode);
         }
 
         if ((methodNode.name + " " + methodNode.desc).equals(constructorToReplace)) {
@@ -155,7 +154,7 @@ public class TransformTessellator extends HelperMethodTransformer {
         boolean transformedDisableLightmap = false;
         for (ListIterator<AbstractInsnNode> it = methodNode.instructions.iterator(); it.hasNext(); ) {
             AbstractInsnNode insn = it.next();
-            if (insn.getOpcode() == Opcodes.GETFIELD && (((FieldInsnNode)insn).name.equals(unObfTexture) || ((FieldInsnNode)insn).name.equals(obfTexture))) {
+            if (insn.getOpcode() == Opcodes.GETFIELD && (((FieldInsnNode) insn).name.equals(unObfTexture) || ((FieldInsnNode) insn).name.equals(obfTexture))) {
                 if (!transformedEnableTexture) {
                     while (insn.getOpcode() != Opcodes.INVOKEVIRTUAL || !((MethodInsnNode) insn).name.equals("position")) {
                         insn = it.next();
@@ -169,7 +168,7 @@ public class TransformTessellator extends HelperMethodTransformer {
                     it.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "coloredlightscore/src/helper/CLTessellatorHelper", "unsetTextureCoord", "()V"));
                     transformedDisableTexture = true;
                 }
-            } else if (insn.getOpcode() == Opcodes.GETFIELD && (((FieldInsnNode)insn).name.equals(unObfBrightness) ||  ((FieldInsnNode)insn).name.equals(obfBrightness))) {
+            } else if (insn.getOpcode() == Opcodes.GETFIELD && (((FieldInsnNode) insn).name.equals(unObfBrightness) || ((FieldInsnNode) insn).name.equals(obfBrightness))) {
                 if (!transformedEnableLightmap) {
                     insn = it.next(); // IFEQ L17 (or similar)
                     String byteBuffer = ColoredLightsCoreLoadingPlugin.MCP_ENVIRONMENT ? unObfByteBuffer : obfByteBuffer;

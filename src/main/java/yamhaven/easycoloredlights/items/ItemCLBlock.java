@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 
 public class ItemCLBlock extends ItemBlock {
 
-    public ItemCLBlock(Block block) {
-        super(block);
+    public ItemCLBlock(int id) {
+        super(id);
         setHasSubtypes(true);
     }
 

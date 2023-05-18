@@ -6,8 +6,8 @@ import net.minecraft.world.IBlockAccess;
 
 public abstract class CLBlock extends Block {
 
-    public CLBlock(Material matt) {
-        super(matt);
+    public CLBlock(int id, Material matt) {
+        super(id, matt);
     }
 
     public abstract int getColorLightValue(int metadata);

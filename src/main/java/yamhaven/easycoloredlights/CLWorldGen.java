@@ -3,7 +3,6 @@ package yamhaven.easycoloredlights;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -35,53 +34,53 @@ public class CLWorldGen implements IWorldGenerator {
 
         if (!world.isAirBlock(par_x, par_y, par_z)) {
             return false;
-        } else if (world.getBlock(par_x, par_y + 1, par_z) != Blocks.netherrack) {
+        } else if (world.getBlockId(par_x, par_y + 1, par_z) != Block.netherrack.blockID) {
             return false;
         } else {
-            world.setBlock(par_x, par_y, par_z, CLMaterialsController.CLStone, meta, 2);
+            world.setBlock(par_x, par_y, par_z, CLMaterialsController.CLStone.blockID, meta, 2);
 
             for (int l = 0; l < 1500; ++l) {
                 int i = par_x + rand.nextInt(8) - rand.nextInt(8);
                 int j = par_y - rand.nextInt(12);
                 int k = par_z + rand.nextInt(8) - rand.nextInt(8);
 
-                if (world.getBlock(i, j, k).getMaterial() == Material.air) {
+                if (world.getBlockMaterial(i, j, k) == Material.air) {
                     int l1 = 0;
 
                     for (int i2 = 0; i2 < 6; ++i2) {
-                        Block block = null;
+                        int blockId = 0;
 
                         if (i2 == 0) {
-                            block = world.getBlock(i - 1, j, k);
+                            blockId = world.getBlockId(i - 1, j, k);
                         }
 
                         if (i2 == 1) {
-                            block = world.getBlock(i + 1, j, k);
+                            blockId = world.getBlockId(i + 1, j, k);
                         }
 
                         if (i2 == 2) {
-                            block = world.getBlock(i, j - 1, k);
+                            blockId = world.getBlockId(i, j - 1, k);
                         }
 
                         if (i2 == 3) {
-                            block = world.getBlock(i, j + 1, k);
+                            blockId = world.getBlockId(i, j + 1, k);
                         }
 
                         if (i2 == 4) {
-                            block = world.getBlock(i, j, k - 1);
+                            blockId = world.getBlockId(i, j, k - 1);
                         }
 
                         if (i2 == 5) {
-                            block = world.getBlock(i, j, k + 1);
+                            blockId = world.getBlockId(i, j, k + 1);
                         }
 
-                        if (block == CLMaterialsController.CLStone) {
+                        if (blockId == CLMaterialsController.CLStone.blockID) {
                             ++l1;
                         }
                     }
 
                     if (l1 == 1) {
-                        world.setBlock(i, j, k, CLMaterialsController.CLStone, meta, 2);
+                        world.setBlock(i, j, k, CLMaterialsController.CLStone.blockID, meta, 2);
                     }
                 }
             }

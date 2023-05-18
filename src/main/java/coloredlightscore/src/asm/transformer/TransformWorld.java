@@ -1,24 +1,19 @@
 package coloredlightscore.src.asm.transformer;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import coloredlightscore.src.asm.transformer.core.ASMUtils;
-import org.objectweb.asm.util.CheckClassAdapter;
-import org.objectweb.asm.ClassVisitor;
-import net.minecraft.world.EnumSkyBlock;
+import coloredlightscore.src.asm.transformer.core.HelperMethodTransformer;
+import coloredlightscore.src.asm.transformer.core.NameMapper;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import coloredlightscore.src.asm.transformer.core.HelperMethodTransformer;
-import coloredlightscore.src.asm.transformer.core.NameMapper;
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class TransformWorld extends HelperMethodTransformer {
 
     // These methods will be replaced by statics in CLWorldHelper
-    String methodsToReplace[] = { "getBlockLightValue_do (IIIZ)I",
-                                  "getLightBrightnessForSkyBlocks (IIII)I",
-                                  "computeLightValue (IIILnet/minecraft/world/EnumSkyBlock;)I",
-                                  "updateLightByType (Lnet/minecraft/world/EnumSkyBlock;III)Z" };
+    String methodsToReplace[] = {"getBlockLightValue_do (IIIZ)I",
+            "getLightBrightnessForSkyBlocks (IIII)I",
+            "computeLightValue (IIILnet/minecraft/world/EnumSkyBlock;)I",
+            "updateLightByType (Lnet/minecraft/world/EnumSkyBlock;III)Z"};
 
     public TransformWorld() {
         // Inform HelperMethodTransformer which class we are interested in
@@ -88,7 +83,7 @@ public class TransformWorld extends HelperMethodTransformer {
         initInternalLightVariables.add(new TypeInsnNode(Opcodes.NEW, "coloredlightscore/src/api/CLWorldPipe"));
         initInternalLightVariables.add(new InsnNode(Opcodes.DUP));
         initInternalLightVariables.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        initInternalLightVariables.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "coloredlightscore/src/api/CLWorldPipe", "<init>", "(Lnet/minecraft/world/World;)V", false));
+        initInternalLightVariables.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "coloredlightscore/src/api/CLWorldPipe", "<init>", "(Lnet/minecraft/world/World;)V"));
         initInternalLightVariables.add(new FieldInsnNode(Opcodes.PUTFIELD, "net/minecraft/world/World", "pipe", "Lcoloredlightscore/src/api/CLWorldPipe;"));
 
 

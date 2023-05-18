@@ -1,12 +1,13 @@
 package coloredlightscore.server;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import java.util.ArrayList;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
+
+import java.util.ArrayList;
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class PlayerManagerHelper {
 
@@ -15,9 +16,9 @@ public class PlayerManagerHelper {
 
     /**
      * Invoked for each player in net.minecraft.server.management.PlayerManager.sendToAllPlayersWatchingChunk
-     * 
+     * <p>
      * Happens when a server is sending chunk data to a player
-     * 
+     *
      * @param player
      * @param chunkLocation
      */
@@ -43,7 +44,7 @@ public class PlayerManagerHelper {
             //chunk = Minecraft.getMinecraft().theWorld.getChunkFromChunkCoords(chunkX, chunkZ);
 
             if (chunk == null) {
-                CLLog.warn("Could not load chunk ({}, {}) for RGB color data!", chunkX, chunkZ);
+                CLLog.log(Level.WARNING, "Could not load chunk ({}, {}) for RGB color data!", new Object[]{chunkX, chunkZ});
                 return;
             }
         }

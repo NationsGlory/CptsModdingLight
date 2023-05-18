@@ -1,18 +1,14 @@
 package coloredlightscore.src.asm.transformer;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
-
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
-
 import coloredlightscore.src.asm.transformer.core.ASMUtils;
 import coloredlightscore.src.asm.transformer.core.MethodTransformer;
 import coloredlightscore.src.asm.transformer.core.NameMapper;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
+
+import java.util.logging.Level;
+
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class TransformPlayerInstance extends MethodTransformer {
 
@@ -52,7 +48,7 @@ public class TransformPlayerInstance extends MethodTransformer {
         String chunkLocationDescriptor = NameMapper.getInstance().getJVMTypeObfuscated("Lnet/minecraft/world/ChunkCoordIntPair;");
         String helperDescriptor = NameMapper.getInstance().getJVMTypeObfuscated("(Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/world/ChunkCoordIntPair;)V");
 
-        CLLog.debug("debug->field name is {}", chunkLocation);
+        CLLog.log(Level.FINE, "debug->field name is {}", chunkLocation);
 
         // Push EntityPlayerMP
         helperInvoke.add(new VarInsnNode(Opcodes.ALOAD, 3));
@@ -67,7 +63,7 @@ public class TransformPlayerInstance extends MethodTransformer {
         if (insertionPoint != null)
             method.instructions.insert(insertionPoint, helperInvoke);
         else {
-            CLLog.error("TransformPlayerInstance.transformNewSendToAllPlayersWatchingChunk()  Could not find last invoke of sendPacket!");
+            CLLog.log(Level.SEVERE, "TransformPlayerInstance.transformNewSendToAllPlayersWatchingChunk()  Could not find last invoke of sendPacket!");
             ASMUtils.findLastInvoke(method, Opcodes.INVOKEVIRTUAL, "net/minecraft/network/NetHandlerPlayServer", "sendPacket (Lnet/minecraft/network/Packet;)V", true);
         }
     }

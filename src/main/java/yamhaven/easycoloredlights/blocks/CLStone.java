@@ -1,38 +1,38 @@
 package yamhaven.easycoloredlights.blocks;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import yamhaven.easycoloredlights.CLMaterialsController;
-import yamhaven.easycoloredlights.lib.BlockInfo;
-import yamhaven.easycoloredlights.lib.ModInfo;
 import coloredlightscore.src.api.CLApi;
 import coloredlightscore.src.api.CLBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
+import yamhaven.easycoloredlights.CLMaterialsController;
+import yamhaven.easycoloredlights.lib.BlockInfo;
+import yamhaven.easycoloredlights.lib.ModInfo;
+
+import java.util.List;
+import java.util.Random;
 
 public class CLStone extends CLBlock {
     public CLStone() {
         super(Material.glass);
         setHardness(0.3F);
-        setStepSound(soundTypeGlass);
+        setStepSound(Block.soundGlassFootstep);
         setCreativeTab(CreativeTabs.tabDecorations);
     }
 
     @SideOnly(Side.CLIENT)
-    private IIcon icons[];
+    private Icon icons[];
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        icons = new IIcon[16];
+    public void registerIcons(IconRegister iconRegister) {
+        icons = new Icon[16];
         for (int i = 0; i < icons.length; i++) {
             icons[i] = iconRegister.registerIcon(ModInfo.ID + ":" + BlockInfo.CLStone + i);
         }
@@ -40,7 +40,7 @@ public class CLStone extends CLBlock {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public IIcon getIcon(int side, int meta) {
+    public Icon getIcon(int side, int meta) {
         return icons[meta];
     }
 
@@ -52,7 +52,7 @@ public class CLStone extends CLBlock {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < 16; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
@@ -75,8 +75,8 @@ public class CLStone extends CLBlock {
     }
 
     @Override
-    public Item getItemDropped(int par1, Random par2Random, int par3) {
-        return CLMaterialsController.CLDust;
+    public int idDropped(int par1, Random par2Random, int par3) {
+        return CLMaterialsController.CLDust.itemID;
     }
 
     @Override
