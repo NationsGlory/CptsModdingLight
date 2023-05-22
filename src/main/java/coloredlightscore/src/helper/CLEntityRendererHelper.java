@@ -98,6 +98,7 @@ public class CLEntityRendererHelper {
             ignoreNextEnableLightmap = false;
             return;
         }
+
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();

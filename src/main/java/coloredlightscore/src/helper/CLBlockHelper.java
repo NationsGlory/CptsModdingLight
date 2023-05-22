@@ -13,7 +13,7 @@ public class CLBlockHelper {
         return Block.blocksList[iBlockAccess.getBlockId(x, y, z)];
     }
 
-    public static Block setLightLevel(Block interceptedReturnValue, Block instance, float par1) {
+    public static Block setLightValue(Block interceptedReturnValue, Block instance, float par1) {
         // Clamp negative values
         if (par1 < 0.0F) {
             par1 = 0.0F;

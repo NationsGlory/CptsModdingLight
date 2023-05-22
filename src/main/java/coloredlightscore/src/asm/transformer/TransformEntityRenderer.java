@@ -50,6 +50,7 @@ public class TransformEntityRenderer extends HelperMethodTransformer {
         if (!ColoredLightsCoreLoadingPlugin.MCP_ENVIRONMENT) {
             oldLightmapDesc = obfOldLightmapDesc;
         }
+
         if(!addSetter) {
             MethodNode setter = new MethodNode(Opcodes.ACC_PUBLIC, "setLightmapTexture", "([I)V", null, null);
             setter.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
