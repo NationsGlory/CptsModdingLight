@@ -2,10 +2,12 @@ package coloredlightscore.src.helper;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.potion.Potion;
 import org.lwjgl.opengl.GL11;
 
@@ -60,7 +62,8 @@ public class CLEntityRendererHelper {
                     }
                 }
             }
-            instance.lightmapTexture.dynamicTextureData = map;
+
+            CLReflectionHelper.setPrivateFinaleValue(DynamicTexture.class, instance.lightmapTexture, map, "dynamicTextureData", "field_110566_b", "b");
 
             instance.lightmapTexture.updateDynamicTexture();
             instance.lightmapUpdateNeeded = false;

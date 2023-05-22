@@ -20,11 +20,11 @@ public class CLFontRendererHelper {
         }
 
         float width;
-        if (optifineUpInThisFontRenderer) {
+        /*if (optifineUpInThisFontRenderer) {
             width = instance.colorCode[c] - 0.01F;
-        } else {
+        } else {*/
             width = (float)instance.charWidth[c] - 0.01F;
-        }
+        //}
         Tessellator tessellator = Tessellator.instance;
 
         // Safe check to avoid exception during LoadingScreen <=> Main Menu transition
@@ -37,7 +37,8 @@ public class CLFontRendererHelper {
             tessellator.draw();
         }
 
-        return optifineUpInThisFontRenderer ? instance.colorCode[c] : (float)instance.charWidth[c];
+        //return optifineUpInThisFontRenderer ? instance.colorCode[c] : (float)instance.charWidth[c];
+        return (float)instance.charWidth[c];
     }
 
     public static float renderUnicodeChar(FontRenderer instance, char c, boolean flag) {
