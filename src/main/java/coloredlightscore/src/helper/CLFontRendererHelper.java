@@ -15,16 +15,13 @@ public class CLFontRendererHelper {
         float ty = (float)(c / 16 * 8);
         float slant = italics ? 1.0F : 0.0F;
 
-        // Assuming that if the RenderEngine is null, we are in the loading screen
-        if(instance.renderEngine == null) {
-            instance.bindTexture(instance.locationFontTexture); // created by Forge since version 1339
-        } else {
-            instance.renderEngine.bindTexture(instance.locationFontTexture); // Avoid using previous method for compatibility
+        if(instance.renderEngine != null) {
+            instance.renderEngine.bindTexture(instance.locationFontTexture);
         }
 
         float width;
         if (optifineUpInThisFontRenderer) {
-            width = instance.d[c] - 0.01F;
+            width = instance.colorCode[c] - 0.01F;
         } else {
             width = (float)instance.charWidth[c] - 0.01F;
         }
@@ -40,7 +37,7 @@ public class CLFontRendererHelper {
             tessellator.draw();
         }
 
-        return optifineUpInThisFontRenderer ? instance.d[c] : (float)instance.charWidth[c];
+        return optifineUpInThisFontRenderer ? instance.colorCode[c] : (float)instance.charWidth[c];
     }
 
     public static float renderUnicodeChar(FontRenderer instance, char c, boolean flag) {

@@ -13,7 +13,7 @@ public class CLChunkHelper {
      */
     public static int getBlockLightValue(Chunk instance, int p_76629_1_, int p_76629_2_, int p_76629_3_, int p_76629_4_)
     {
-        ExtendedBlockStorage extendedblockstorage = instance.storageArrays[p_76629_2_ >> 4];
+        ExtendedBlockStorage extendedblockstorage = instance.getBlockStorageArray()[p_76629_2_ >> 4];
 
         if (extendedblockstorage == null)
         {

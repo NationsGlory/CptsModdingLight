@@ -1,7 +1,6 @@
 package coloredlightscore.src.asm;
 
 import coloredlightscore.fmlevents.ChunkDataEventHandler;
-import coloredlightscore.network.PacketHandler;
 import coloredlightscore.src.api.CLApi;
 import coloredlightscore.src.helper.CLEntityRendererHelper;
 import com.google.common.eventbus.EventBus;
@@ -11,7 +10,6 @@ import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -20,7 +18,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.logging.Level;
 
 import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
@@ -61,13 +58,9 @@ public class ColoredLightsCoreDummyContainer extends DummyModContainer {
 
     @Subscribe
     public void preInit(FMLPreInitializationEvent evt) {
-
         CLLog = evt.getModLog();
 
         CLLog.info("Starting up ColoredLightsCore");
-
-        // Spin up network handler
-        PacketHandler.init();
 
         // Hook into chunk events
         MinecraftForge.EVENT_BUS.register(chunkDataEventHandler);
@@ -92,18 +85,14 @@ public class ColoredLightsCoreDummyContainer extends DummyModContainer {
         Block.lightValue[Block.furnaceBurning.blockID] = CLApi.makeRGBLightValue(13, 12, 10);
         Block.lightValue[Block.redstoneRepeaterActive.blockID] = CLApi.makeRGBLightValue(9, 0, 0);
 
-        Object thisShouldBeABlock;
-        int l;
-        Iterator blockRegistryInterator = GameData.getBlockRegistry().iterator();
-        while (blockRegistryInterator.hasNext()) {
-            thisShouldBeABlock = blockRegistryInterator.next();
-            if (thisShouldBeABlock instanceof Block) {
-                Block block = (Block) thisShouldBeABlock;
-                l = Block.lightValue[block.blockID];
-                if ((l > 0) && (l <= 0xF)) {
-                    CLLog.info(((Block) thisShouldBeABlock).getLocalizedName() + "has light:" + l + ", but no color");
-                    Block.lightValue[block.blockID] = (l << 15) | (l << 10) | (l << 5) | l; //copy vanilla brightness into each color component to make it white/grey.
-                }
+        for (Block block : Block.blocksList) {
+            if (block == null)
+                continue;
+
+            int l = Block.lightValue[block.blockID];
+            if ((l > 0) && (l <= 0xF)) {
+                CLLog.info(block.getLocalizedName() + "has light:" + l + ", but no color");
+                Block.lightValue[block.blockID] = (l << 15) | (l << 10) | (l << 5) | l; //copy vanilla brightness into each color component to make it white/grey.
             }
         }
 

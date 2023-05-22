@@ -1,24 +1,23 @@
 package coloredlightscore.network;
 
 import coloredlightscore.server.ChunkStorageRGB;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
 
+import java.util.logging.Level;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
-public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColorDataPacket, IMessage> {
+public class ChunkColorDataPacket {
 
     // In order of packet layout:
     //public int packetId;
@@ -34,17 +33,9 @@ public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColo
 
     private final boolean USE_COMPRESSION = true;
 
-    @Override
-    public IMessage onMessage(ChunkColorDataPacket packet, MessageContext context) {
-        if (context.side == Side.CLIENT)
-            processColorDataPacket(packet);
-
-        return null;
-    }
-
     @SideOnly(Side.CLIENT)
-    private void processColorDataPacket(ChunkColorDataPacket packet) {
-        ChunkColorDataPacket ccdPacket = (ChunkColorDataPacket) packet;
+    public void processColorDataPacket() {
+        ChunkColorDataPacket ccdPacket = this;
         Chunk targetChunk = null;
 
         targetChunk = Minecraft.getMinecraft().theWorld.getChunkFromChunkCoords(ccdPacket.chunkXPosition, ccdPacket.chunkZPosition);
@@ -53,11 +44,10 @@ public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColo
             ChunkStorageRGB.loadColorData(targetChunk, ccdPacket.arraySize, ccdPacket.yLocation, ccdPacket.RedColorArray, ccdPacket.GreenColorArray, ccdPacket.BlueColorArray);
             //CLLog.info("ProcessColorDataPacket() loaded RGB for ({},{})", ccdPacket.chunkXPosition, ccdPacket.chunkZPosition);
         } else
-            CLLog.warn("ProcessColorDataPacket()  Chunk located at ({}, {}) could not be found in the local world!", ccdPacket.chunkXPosition, ccdPacket.chunkZPosition);
+            CLLog.log(Level.WARNING, "ProcessColorDataPacket()  Chunk located at ({}, {}) could not be found in the local world!", new Object[]{ccdPacket.chunkXPosition, ccdPacket.chunkZPosition});
     }
 
-    @Override
-    public void fromBytes(ByteBuf bytes) {
+    public void fromBytes(ByteArrayDataInput bytes) {
         try {
             byte[] rawColorData = new byte[2048 * 16 * 3];
             byte[] compressedColorData = new byte[32000];
@@ -83,7 +73,7 @@ public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColo
 
             if (USE_COMPRESSION) {
                 compressedSize = bytes.readInt();
-                bytes.readBytes(compressedColorData, 0, compressedSize);
+                bytes.readFully(compressedColorData, 0, compressedSize);
 
                 Inflater inflater = new Inflater();
                 inflater.setInput(compressedColorData);
@@ -91,13 +81,13 @@ public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColo
                 try {
                     inflater.inflate(rawColorData);
                 } catch (DataFormatException e) {
-                    CLLog.warn("ChunkColorDataPacket()  ", e);
+                    CLLog.log(Level.WARNING, "ChunkColorDataPacket()  ", e);
                 } finally {
                     inflater.end();
                 }
             } else
                 // !USE_COMPRESSION
-                bytes.readBytes(rawColorData);
+                bytes.readFully(rawColorData);
 
             for (int i = 0; i < arraySize; i++) {
                 if ((arraysPresent & (1 << i)) != 0) {
@@ -127,12 +117,11 @@ public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColo
             }
 
         } catch (Exception e) {
-            CLLog.error("fromBytes ", e);
+            CLLog.log(Level.SEVERE, "fromBytes ", e);
         }
     }
 
-    @Override
-    public void toBytes(ByteBuf bytes) {
+    public void toBytes(ByteArrayDataOutput bytes) {
         try {
             byte[] rawColorData = new byte[2048 * 16 * 3];
             byte[] compressedColorData = new byte[32000];
@@ -194,15 +183,15 @@ public class ChunkColorDataPacket implements IMessage, IMessageHandler<ChunkColo
                 compressedSize = deflate.deflate(compressedColorData);
 
                 if (compressedSize == 0)
-                    CLLog.warn("writePacket compression failed");
+                    CLLog.log(Level.WARNING, "writePacket compression failed");
 
                 bytes.writeInt(compressedSize);
-                bytes.writeBytes(compressedColorData, 0, compressedSize);
+                bytes.write(compressedColorData, 0, compressedSize);
             } else
                 // !USE_COMPRESSION
-                bytes.writeBytes(rawColorData, 0, rawColorData.length);
+                bytes.write(rawColorData, 0, rawColorData.length);
         } catch (Exception e) {
-            CLLog.error("toBytes  ", e);
+            CLLog.log(Level.SEVERE, "toBytes  ", e);
         }
     }
 

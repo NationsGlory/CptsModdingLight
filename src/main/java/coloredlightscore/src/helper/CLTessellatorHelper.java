@@ -1,6 +1,10 @@
 package coloredlightscore.src.helper;
 
-import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +14,9 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import java.util.logging.Level;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import org.lwjgl.opengl.*;
+import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class CLTessellatorHelper {
     //private static int nativeBufferSize = 0x200000;
@@ -39,7 +42,7 @@ public class CLTessellatorHelper {
 
     public static void setBrightness(Tessellator instance, int par1) {
         instance.hasBrightness = true;
-        instance.brightness = par1;
+        instance.setBrightness(par1);
     }
 
     public static void setupShaders() {
@@ -56,9 +59,9 @@ public class CLTessellatorHelper {
         GL20.glCompileShader(vertShader);
         infoStr = GL20.glGetShaderInfoLog(vertShader, 2000);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
-            CLLog.error(vertSource);
-            CLLog.error("Compiling vertShader");
-            CLLog.error(infoStr);
+            CLLog.log(Level.SEVERE, vertSource);
+            CLLog.log(Level.SEVERE, "Compiling vertShader");
+            CLLog.log(Level.SEVERE, infoStr);
         } else if (infoStr != "") {
             CLLog.info(vertSource);
             CLLog.info("Compiling vertShader");
@@ -68,9 +71,9 @@ public class CLTessellatorHelper {
         GL20.glCompileShader(fragShader);
         infoStr = GL20.glGetShaderInfoLog(fragShader, 2000);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
-            CLLog.error(fragSource);
-            CLLog.error("Compiling fragShader");
-            CLLog.error(infoStr);
+            CLLog.log(Level.SEVERE, fragSource);
+            CLLog.log(Level.SEVERE, "Compiling fragShader");
+            CLLog.log(Level.SEVERE, infoStr);
         } else if (infoStr != "") {
             CLLog.info(fragSource);
             CLLog.info("Compiling fragShader");
@@ -81,16 +84,15 @@ public class CLTessellatorHelper {
         GL20.glAttachShader(clProgram, vertShader);
         GL20.glAttachShader(clProgram, fragShader);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
-            CLLog.error("Error attaching shaders");
+            CLLog.log(Level.SEVERE, "Error attaching shaders");
         }
-
 
 
         GL20.glLinkProgram(clProgram);
         infoStr = GL20.glGetProgramInfoLog(clProgram, 2000);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
-            CLLog.error("Linking Program");
-            CLLog.error(infoStr);
+            CLLog.log(Level.SEVERE, "Linking Program");
+            CLLog.log(Level.SEVERE, infoStr);
         } else if (infoStr != "") {
             CLLog.info("Linking Program");
             CLLog.info(infoStr);
@@ -98,13 +100,13 @@ public class CLTessellatorHelper {
         GL20.glDetachShader(clProgram, vertShader);
         GL20.glDetachShader(clProgram, fragShader);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
-            CLLog.error("Error detaching shaders");
+            CLLog.log(Level.SEVERE, "Error detaching shaders");
         }
 
         GL20.glDeleteShader(vertShader);
         GL20.glDeleteShader(fragShader);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
-            CLLog.error("Error deleting shaders (WHAT DID YOU DO?!?)");
+            CLLog.log(Level.SEVERE, "Error deleting shaders (WHAT DID YOU DO?!?)");
         }
 
         texCoordParam = GL20.glGetAttribLocation(clProgram, "TexCoord");
@@ -112,13 +114,13 @@ public class CLTessellatorHelper {
         lightCoordUniform = GL20.glGetUniformLocation(clProgram, "u_LightCoord");
 
         if (texCoordParam <= 0) {
-            CLLog.error("texCoordParam attribute location returned: " + texCoordParam);
+            CLLog.log(Level.SEVERE, "texCoordParam attribute location returned: " + texCoordParam);
         }
         if (lightCoordParam <= 0) {
-            CLLog.error("lightCoordParam attribute location returned: " + lightCoordParam);
+            CLLog.log(Level.SEVERE, "lightCoordParam attribute location returned: " + lightCoordParam);
         }
         if (lightCoordUniform <= 0) {
-            CLLog.error("lightCoordUniform attribute location returned: " + lightCoordUniform);
+            CLLog.log(Level.SEVERE, "lightCoordUniform attribute location returned: " + lightCoordUniform);
         }
     }
 
@@ -129,8 +131,8 @@ public class CLTessellatorHelper {
         String line;
         try {
             while ((line = br.readLine()) != null) {
-                    source.append(line + "\n");
-                }
+                source.append(line + "\n");
+            }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,7 +159,7 @@ public class CLTessellatorHelper {
         lastGLErrorCode = GL11.glGetError();
         if (lastGLErrorCode != GL11.GL_NO_ERROR) {
             if (!hasFlaggedOpenglError) {
-                CLLog.warn("Render error entering CLTessellatorHelper.setTextureCoord()! Error Code: " + lastGLErrorCode + ". Trying to proceed anyway...");
+                CLLog.log(Level.WARNING, "Render error entering CLTessellatorHelper.setTextureCoord()! Error Code: " + lastGLErrorCode + ". Trying to proceed anyway...");
                 hasFlaggedOpenglError = true;
             }
         }
@@ -182,16 +184,16 @@ public class CLTessellatorHelper {
     }
 
     public static void addVertex(Tessellator instance, double par1, double par3, double par5) {
-        int cl_rawBufferSize = instance.getRawBufferSize();
+        int cl_rawBufferSize = instance.rawBufferSize;
 
         if (instance.rawBufferIndex >= cl_rawBufferSize - 32) {
             if (cl_rawBufferSize == 0) {
                 cl_rawBufferSize = 0x10000; //65536
-                instance.setRawBufferSize(cl_rawBufferSize);
+                instance.rawBufferSize = cl_rawBufferSize;
                 instance.rawBuffer = new int[cl_rawBufferSize];
             } else {
                 cl_rawBufferSize *= 2;
-                instance.setRawBufferSize(cl_rawBufferSize);
+                instance.rawBufferSize = cl_rawBufferSize;
                 instance.rawBuffer = Arrays.copyOf(instance.rawBuffer, cl_rawBufferSize);
             }
         }
@@ -207,12 +209,12 @@ public class CLTessellatorHelper {
             /* << and >> take precedence over &
              * Incoming:
              * 0000 0000 SSSS BBBB GGGG RRRR LLLL 0000 */
-            
+
             /* 0000 SSSS 0000 BBBB 0000 GGGG 0000 RRRR */
             instance.rawBuffer[instance.rawBufferIndex + 7] = (instance.brightness << 4 & 0x0F000000)
-                                                            | (instance.brightness << 0 & 0x000F0000)
-                                                            | (instance.brightness >> 4 & 0x00000F00)
-                                                            | (instance.brightness >> 8 & 0x0000000F);
+                    | (instance.brightness << 0 & 0x000F0000)
+                    | (instance.brightness >> 4 & 0x00000F00)
+                    | (instance.brightness >> 8 & 0x0000000F);
         }
 
         if (instance.hasColor) {

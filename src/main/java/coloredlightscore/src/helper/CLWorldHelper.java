@@ -1,16 +1,17 @@
 package coloredlightscore.src.helper;
 
 import coloredlightscore.src.asm.ColoredLightsCoreDummyContainer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.util.Facing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 
 import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
@@ -19,7 +20,7 @@ public class CLWorldHelper {
     //Added the parameter 'World world, ' and then replaces all instances of world, with WORLD
     public static int getBlockLightValue_do(World world, int x, int y, int z, boolean par4) {
         if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000) {
-            if (par4 && world.getBlock(x, y, z).getUseNeighborBrightness()) {
+            if (par4 && Block.useNeighborBrightness[world.getBlockId(x, y, z)]) {
                 // heaton84 - should be world.getBlockLightValue_do,
                 // switched to CLWorldHelper.getBlockLightValue_do
                 // This will save an extra invoke
@@ -97,13 +98,13 @@ public class CLWorldHelper {
         if (par1Enu == EnumSkyBlock.Sky && world.pipe.canBlockSeeTheSky(par_x, par_y, par_z)) {
             return 15;
         } else {
-            Block block = world.getBlock(par_x, par_y, par_z);
+            Block block = CLBlockHelper.getBlock(world, par_x, par_y, par_z);
 
             int currentLight = 0;
             if (par1Enu != EnumSkyBlock.Sky) {
                 currentLight = (block == null ? 0 : getLightValueSomehow(block, world, par_x, par_y, par_z));
                 if ((currentLight > 0) && (currentLight <= 0xF)) {
-                    currentLight = (currentLight<<15) | (currentLight<<10) | (currentLight<<5) | currentLight; //copy vanilla brightness into each color component to make it white/grey if it is uncolored.
+                    currentLight = (currentLight << 15) | (currentLight << 10) | (currentLight << 5) | currentLight; //copy vanilla brightness into each color component to make it white/grey if it is uncolored.
                 }
             }
             int opacity = (block == null ? 0 : block.getLightOpacity(world, par_x, par_y, par_z));
@@ -118,11 +119,9 @@ public class CLWorldHelper {
 
             if (opacity >= 15) {
                 return 0;
-            }
-            else if ((currentLight&15) >= 14) {
+            } else if ((currentLight & 15) >= 14) {
                 return currentLight;
-            }
-            else {
+            } else {
                 for (int faceIndex = 0; faceIndex < 6; ++faceIndex) {
                     int l1 = par_x + Facing.offsetsXForSide[faceIndex];
                     int i2 = par_y + Facing.offsetsYForSide[faceIndex];
@@ -142,9 +141,9 @@ public class CLWorldHelper {
                     bl -= opacity & 0x78000;
                     */
                     //Use vanilla light opacity for now
-                    rl =  Math.max(0, rl - (opacity << 5));
-                    gl =  Math.max(0, gl - (opacity << 10));
-                    bl =  Math.max(0, bl - (opacity << 15));
+                    rl = Math.max(0, rl - (opacity << 5));
+                    gl = Math.max(0, gl - (opacity << 10));
+                    bl = Math.max(0, bl - (opacity << 15));
 
                     // For each component, retain greater of currentLight, (neighborLight - opacity)
                     if (ll > (currentLight & 0x0000F)) {
@@ -152,7 +151,7 @@ public class CLWorldHelper {
                     }
                     if (rl > (currentLight & 0x001E0)) {
                         currentLight = (currentLight & 0x7BC0F) | rl; // 0x00F | 0x3C00 | 0x78000
-                    }   
+                    }
                     if (gl > (currentLight & 0x03C00)) {
                         currentLight = (currentLight & 0x781EF) | gl; // 0x00F | 0x01E0 | 0x78000
                     }
@@ -268,7 +267,7 @@ public class CLWorldHelper {
                                     lightEntry = world.pipe.lightAdditionNeeded[neighbor_x - par_x + 14][neighbor_y - par_y + 14][neighbor_z - par_z + 14];
                                     if (lightEntry != world.pipe.updateFlag && (lightEntry != world.pipe.updateFlag + 1 || !shouldIncrement)) { // on recursive calls, ignore instances of world.pipe.updateFlag being flag + 1
 
-                                        opacity = Math.max(1, world.getBlock(neighbor_x, neighbor_y, neighbor_z).getLightOpacity(world, neighbor_x, neighbor_y, neighbor_z));
+                                        opacity = Math.max(1, Block.lightOpacity[world.getBlockId(neighbor_x, neighbor_y, neighbor_z)]);
 
                                         //Proceed only if the block is non-solid
                                         if (opacity < 15) {
@@ -308,7 +307,7 @@ public class CLWorldHelper {
             }
 
             if ((filler > 24389) || (lightAdditionsCalled != lightAdditionsSatisfied)) {
-                CLLog.warn("Error in Light Addition:" + filler + (par1Enu==EnumSkyBlock.Block?" (isBlock)": " (isSky)") + " Saved:" + Integer.toBinaryString((int) savedLightValue) + " Comp:" + Integer.toBinaryString((int)compLightValue) + " isBackfill:" + " updateFlag:" + world.pipe.updateFlag + " Called:" + lightAdditionsCalled + " Satisfied:" + lightAdditionsSatisfied);
+                CLLog.log(Level.WARNING, "Error in Light Addition:" + filler + (par1Enu == EnumSkyBlock.Block ? " (isBlock)" : " (isSky)") + " Saved:" + Integer.toBinaryString((int) savedLightValue) + " Comp:" + Integer.toBinaryString((int) compLightValue) + " isBackfill:" + " updateFlag:" + world.pipe.updateFlag + " Called:" + lightAdditionsCalled + " Satisfied:" + lightAdditionsSatisfied);
             }
 
             if (shouldIncrement) { // Only proceed if we are NOT in a recursive call
@@ -348,7 +347,7 @@ public class CLWorldHelper {
                                 man_y = MathHelper.abs_int(neighbor_y - par_y);
                                 man_z = MathHelper.abs_int(neighbor_z - par_z);
 
-                                opacity = Math.max(1, world.getBlock(neighbor_x, neighbor_y, neighbor_z).getLightOpacity(world, neighbor_x, neighbor_y, neighbor_z));
+                                opacity = Math.max(1, Block.lightOpacity[world.getBlockId(neighbor_x, neighbor_y, neighbor_z)]);
                                 neighborLightEntry = world.pipe.getSavedLightValue(par1Enu, neighbor_x, neighbor_y, neighbor_z);
 
                                 if (opacity < 15 || neighborLightEntry > 0) {
@@ -409,7 +408,7 @@ public class CLWorldHelper {
                     }
 
                     if (filler > 4097) {
-                        CLLog.warn("Light Subtraction Overfilled:" + filler + (par1Enu == EnumSkyBlock.Block ? " (isBlock)" : " (isSky)") + " Saved:" + Integer.toBinaryString((int) savedLightValue) + " Comp:" + Integer.toBinaryString((int) compLightValue) + " isBackfill:" + " updateFlag:" + world.pipe.updateFlag + " Called:" + lightAdditionsCalled + " Satisfied:" + lightAdditionsSatisfied);
+                        CLLog.log(Level.WARNING, "Light Subtraction Overfilled:" + filler + (par1Enu == EnumSkyBlock.Block ? " (isBlock)" : " (isSky)") + " Saved:" + Integer.toBinaryString((int) savedLightValue) + " Comp:" + Integer.toBinaryString((int) compLightValue) + " isBackfill:" + " updateFlag:" + world.pipe.updateFlag + " Called:" + lightAdditionsCalled + " Satisfied:" + lightAdditionsSatisfied);
                     }
 
                     world.theProfiler.endStartSection("lightBackfill");
@@ -440,9 +439,9 @@ public class CLWorldHelper {
      */
     private static int getLightValueSomehow(Block block, World world, int par_x, int par_y, int par_z) {
         if (ColoredLightsCoreDummyContainer.getDynamicLight != null && world.isRemote) {
-                nop();
+            nop();
             try {
-                int a = (Integer)ColoredLightsCoreDummyContainer.getDynamicLight.invoke(null, world, block, par_x, par_y, par_z);
+                int a = (Integer) ColoredLightsCoreDummyContainer.getDynamicLight.invoke(null, world, block, par_x, par_y, par_z);
                 if (a != 0) CLLog.info("got :" + a);
                 return a;
             } catch (IllegalAccessException e) {

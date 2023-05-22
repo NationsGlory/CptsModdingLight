@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Random;
 
 public class CLStone extends CLBlock {
-    public CLStone() {
-        super(Material.glass);
+    public CLStone(int id) {
+        super(id, Material.glass);
         setHardness(0.3F);
         setStepSound(Block.soundGlassFootstep);
         setCreativeTab(CreativeTabs.tabDecorations);

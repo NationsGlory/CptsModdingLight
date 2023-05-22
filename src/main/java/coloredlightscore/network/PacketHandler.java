@@ -1,24 +1,25 @@
 package coloredlightscore.network;
 
 import coloredlightscore.server.ChunkStorageRGB;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.logging.Level;
 
 import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
-public class PacketHandler {
-
-
-    public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel("ColoredLightsCore");
-
-    public static void init() {
-        INSTANCE.registerMessage(ChunkColorDataPacket.class, ChunkColorDataPacket.class, 0, Side.SERVER);
-        INSTANCE.registerMessage(ChunkColorDataPacket.class, ChunkColorDataPacket.class, 0, Side.CLIENT);
-    }
+public class PacketHandler implements IPacketHandler {
 
     public static void sendChunkColorData(Chunk chunk, EntityPlayerMP player) {
         try {
@@ -43,14 +44,27 @@ public class PacketHandler {
             //this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
             //this.channels.get(Side.SERVER).writeOutbound(packet);		
 
-            //Think this is right 
-            INSTANCE.sendTo(packet, player);
+            //Think this is right
+
+            ByteArrayDataOutput data = ByteStreams.newDataOutput();
+            packet.toBytes(data);
+
+            PacketDispatcher.sendPacketToPlayer(PacketDispatcher.getPacket("ColoredLightsCore", data.toByteArray()), (Player) player);
 
             //CLLog.info("SendChunkColorData()  Sent for {}, {}", chunk.xPosition, chunk.zPosition);
         } catch (Exception e) {
-            CLLog.warn("SendChunkColorData()  ", e);
+            CLLog.log(Level.WARNING, "SendChunkColorData()  ", e);
         }
 
     }
 
+    @Override
+    public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+        if(FMLCommonHandler.instance().getSide().isClient()) {
+            ChunkColorDataPacket chunkColorDataPacket = new ChunkColorDataPacket();
+            ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+            chunkColorDataPacket.fromBytes(data);
+            chunkColorDataPacket.processColorDataPacket();
+        }
+    }
 }

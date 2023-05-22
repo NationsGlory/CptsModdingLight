@@ -24,8 +24,8 @@ public class CLLamp extends CLBlock {
     /** The Block the lamp is supposed to switch to **/
     protected Block switchBlock = null;
 
-    public CLLamp(boolean isPowered) {
-        super(Material.redstoneLight);
+    public CLLamp(int id, boolean isPowered) {
+        super(id, Material.redstoneLight);
         this.powered = isPowered;
 
         setHardness(0.3F);
