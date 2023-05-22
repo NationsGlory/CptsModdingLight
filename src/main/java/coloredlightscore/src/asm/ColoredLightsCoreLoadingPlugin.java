@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.*;
 
 @TransformerExclusions("coloredlightscore.*")
-@MCVersion("1.7.10")
+@MCVersion("1.6.4")
 @Name("ColoredLightsCore")
 @SortingIndex(1001)
 public class ColoredLightsCoreLoadingPlugin implements IFMLLoadingPlugin {

@@ -13,8 +13,8 @@ import yamhaven.easycoloredlights.lib.ModInfo;
 import java.util.List;
 
 public class CLDust extends Item {
-    public CLDust() {
-        super(2000);
+    public CLDust(int id) {
+        super(id);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         setCreativeTab(CreativeTabs.tabMaterials);

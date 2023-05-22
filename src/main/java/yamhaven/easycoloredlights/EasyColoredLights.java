@@ -13,7 +13,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION)
-@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = {"ColoredLightsCore"}, packetHandler = PacketHandler.class)
+@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = {"ColoredLights"}, packetHandler = PacketHandler.class)
 public class EasyColoredLights {
     @SidedProxy(clientSide = ModInfo.PROXY_LOCATION + ".ClientProxy", serverSide = ModInfo.PROXY_LOCATION + ".CommonProxy")
     public static CommonProxy proxy;

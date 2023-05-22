@@ -20,6 +20,15 @@ minecraft {
 	version = "1.6.4-9.11.1.964"
 }
 
+jar {
+    exclude 'net/minecraft/**'
+
+    manifest {
+        attributes "FMLCorePlugin": "coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin"
+        attributes "FMLCorePluginContainsFMLMod": "true"
+    }
+}
+
 processResources
 {
     // replace stuff in mcmod.info, nothing else

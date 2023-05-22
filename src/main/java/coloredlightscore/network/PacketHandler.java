@@ -49,7 +49,7 @@ public class PacketHandler implements IPacketHandler {
             ByteArrayDataOutput data = ByteStreams.newDataOutput();
             packet.toBytes(data);
 
-            PacketDispatcher.sendPacketToPlayer(PacketDispatcher.getPacket("ColoredLightsCore", data.toByteArray()), (Player) player);
+            PacketDispatcher.sendPacketToPlayer(PacketDispatcher.getPacket("ColoredLights", data.toByteArray()), (Player) player);
 
             //CLLog.info("SendChunkColorData()  Sent for {}, {}", chunk.xPosition, chunk.zPosition);
         } catch (Exception e) {

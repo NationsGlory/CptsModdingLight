@@ -18,10 +18,10 @@ public class CLMaterialsController {
     public static Item CLDust;
 
     public static void init() {
-        CLBlockIdle = (CLLamp) new CLLamp(250, false).setUnlocalizedName(BlockInfo.CLLamp);
-        CLBlockOn = (CLLamp) new CLLamp(251, true).setUnlocalizedName(BlockInfo.CLLamp + "On");
-        CLStone = new CLStone(252).setUnlocalizedName(BlockInfo.CLStone);
-        CLDust = new CLDust().setUnlocalizedName(BlockInfo.CLDust);
+        CLBlockIdle = (CLLamp) new CLLamp(2201, false).setUnlocalizedName(BlockInfo.CLLamp);
+        CLBlockOn = (CLLamp) new CLLamp(2202, true).setUnlocalizedName(BlockInfo.CLLamp + "On");
+        CLStone = new CLStone(2203).setUnlocalizedName(BlockInfo.CLStone);
+        CLDust = new CLDust(2204).setUnlocalizedName(BlockInfo.CLDust);
 
         CLBlockIdle.setSwitchBlock(CLBlockOn);
         CLBlockOn.setSwitchBlock(CLBlockIdle);
