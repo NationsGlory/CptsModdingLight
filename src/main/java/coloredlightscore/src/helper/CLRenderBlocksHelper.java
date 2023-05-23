@@ -66,10 +66,10 @@ public class CLRenderBlocksHelper {
             instance.aoLightValueScratchYZNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
             instance.aoLightValueScratchYZNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
             instance.aoLightValueScratchXYPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
-            isAirish1P = instance.blockAccess.isAirBlock(x + 1, y, z);
-            isAirish1N = instance.blockAccess.isAirBlock(x - 1, y, z);
-            isAirish2P = instance.blockAccess.isAirBlock(x, y, z + 1);
-            isAirish2N = instance.blockAccess.isAirBlock(x, y, z - 1);
+            isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x + 1, y, z)];
+            isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x - 1, y, z)];
+            isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z + 1)];
+            isAirish2N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z - 1)];
 
             if (!isAirish2N && !isAirish1N) {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXYNN;
@@ -163,10 +163,10 @@ public class CLRenderBlocksHelper {
             instance.aoLightValueScratchXYPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
             instance.aoLightValueScratchYZPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
             instance.aoLightValueScratchYZPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
-            isAirish1P = instance.blockAccess.isAirBlock(x + 1, y, z);
-            isAirish1N = instance.blockAccess.isAirBlock(x - 1, y, z);
-            isAirish2P = instance.blockAccess.isAirBlock(x, y, z + 1);
-            isAirish2N = instance.blockAccess.isAirBlock(x, y, z - 1);
+            isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x + 1, y, z)];
+            isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x - 1, y, z)];
+            isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z + 1)];
+            isAirish2N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z - 1)];
 
             if (!isAirish2N && !isAirish1N) {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXYNP;
@@ -254,10 +254,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessYZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessYZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
             instance.aoBrightnessXZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
-            isAirish1P = instance.blockAccess.isAirBlock(x + 1, y, z);
-            isAirish1N = instance.blockAccess.isAirBlock(x - 1, y, z);
-            isAirish2P = instance.blockAccess.isAirBlock(x, y + 1, z);
-            isAirish2N = instance.blockAccess.isAirBlock(x, y - 1, z);
+            isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x + 1, y, z)];
+            isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x - 1, y, z)];
+            isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y + 1, z)];
+            isAirish2N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y - 1, z)];
 
             if (!isAirish1N && !isAirish2N) {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXZNN;
@@ -369,10 +369,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessXZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             instance.aoBrightnessYZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessYZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
-            isAirish1P = instance.blockAccess.isAirBlock(x + 1, y, z);
-            isAirish1N = instance.blockAccess.isAirBlock(x - 1, y, z);
-            isAirish2P = instance.blockAccess.isAirBlock(x, y + 1, z);
-            isAirish2N = instance.blockAccess.isAirBlock(x, y - 1, z);
+            isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x + 1, y, z)];
+            isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x - 1, y, z)];
+            isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y + 1, z)];
+            isAirish2N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y - 1, z)];
 
             if (!isAirish1N && !isAirish2N) {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXZNP;
@@ -484,10 +484,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessXZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessXZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
             instance.aoBrightnessXYNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
-            isAirish1P = instance.blockAccess.isAirBlock(x, y + 1, z);
-            isAirish1N = instance.blockAccess.isAirBlock(x, y - 1, z);
-            isAirish2P = instance.blockAccess.isAirBlock(x, y, z - 1);
-            isAirish2N = instance.blockAccess.isAirBlock(x, y, z + 1);
+            isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y + 1, z)];
+            isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y - 1, z)];
+            isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z - 1)];
+            isAirish2N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z + 1)];
 
             if (!isAirish2P && !isAirish1N) {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXZNN;
@@ -599,10 +599,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessXZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessXZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
             instance.aoBrightnessXYPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
-            isAirish1P = instance.blockAccess.isAirBlock(x, y + 1, z);
-            isAirish1N = instance.blockAccess.isAirBlock(x, y - 1, z);
-            isAirish2P = instance.blockAccess.isAirBlock(x, y, z + 1);
-            isAirish2N = instance.blockAccess.isAirBlock(x, y, z - 1);
+            isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y + 1, z)];
+            isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y - 1, z)];
+            isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z + 1)];
+            isAirish2N = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z - 1)];
 
             if (!isAirish1N && !isAirish2N) {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXZPN;

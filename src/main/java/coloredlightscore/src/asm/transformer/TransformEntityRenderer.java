@@ -113,8 +113,6 @@ public class TransformEntityRenderer extends HelperMethodTransformer {
             }
         }
 
-        System.out.println("SWAGED ? " + found2DLightmap);
-
         return found2DLightmap;
     }
     
