@@ -62,10 +62,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessYZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessYZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
             instance.aoBrightnessXYPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
-            instance.aoLightValueScratchXYNN = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z).getLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchYZNN = CLBlockHelper.getBlock(instance.blockAccess,x, y, z - 1).getLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchYZNP = CLBlockHelper.getBlock(instance.blockAccess,x, y, z + 1).getLightValue(instance.blockAccess,x, y, z + 1);
-            instance.aoLightValueScratchXYPN = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z).getLightValue(instance.blockAccess,x + 1, y, z);
+            instance.aoLightValueScratchXYNN = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z)];
+            instance.aoLightValueScratchYZNN = Block.lightValue[instance.blockAccess.getBlockId(x, y, z - 1)];
+            instance.aoLightValueScratchYZNP = Block.lightValue[instance.blockAccess.getBlockId(x, y, z + 1)];
+            instance.aoLightValueScratchXYPN = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z)];
             isAirish1P = instance.blockAccess.isAirBlock(x + 1, y, z);
             isAirish1N = instance.blockAccess.isAirBlock(x - 1, y, z);
             isAirish2P = instance.blockAccess.isAirBlock(x, y, z + 1);
@@ -75,7 +75,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXYNN;
                 instance.aoBrightnessXYZNNN = instance.aoBrightnessXYNN;
             } else {
-                instance.aoLightValueScratchXYZNNN = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z - 1).getLightValue(instance.blockAccess,x - 1, y, z - 1);
+                instance.aoLightValueScratchXYZNNN = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z - 1)];
                 instance.aoBrightnessXYZNNN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z - 1);
             }
 
@@ -83,7 +83,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXYNN;
                 instance.aoBrightnessXYZNNP = instance.aoBrightnessXYNN;
             } else {
-                instance.aoLightValueScratchXYZNNP = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z + 1).getLightValue(instance.blockAccess,x - 1, y, z + 1);
+                instance.aoLightValueScratchXYZNNP = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z + 1)];
                 instance.aoBrightnessXYZNNP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z + 1);
             }
 
@@ -91,7 +91,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXYPN;
                 instance.aoBrightnessXYZPNN = instance.aoBrightnessXYPN;
             } else {
-                instance.aoLightValueScratchXYZPNN = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z - 1).getLightValue(instance.blockAccess,x + 1, y, z - 1);
+                instance.aoLightValueScratchXYZPNN = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z - 1)];
                 instance.aoBrightnessXYZPNN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z - 1);
             }
 
@@ -99,7 +99,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNP = instance.aoLightValueScratchXYPN;
                 instance.aoBrightnessXYZPNP = instance.aoBrightnessXYPN;
             } else {
-                instance.aoLightValueScratchXYZPNP = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z + 1).getLightValue(instance.blockAccess,x + 1, y, z + 1);
+                instance.aoLightValueScratchXYZPNP = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z + 1)];
                 instance.aoBrightnessXYZPNP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z + 1);
             }
 
@@ -109,11 +109,11 @@ public class CLRenderBlocksHelper {
 
             brightnessScratchValue = blockBrightness;
 
-            if (instance.renderMinY <= 0.0D || !CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z).isOpaqueCube()) {
+            if (instance.renderMinY <= 0.0D || !instance.blockAccess.isBlockOpaqueCube(x, y - 1, z)) {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z).getLightValue(instance.blockAccess,x, y - 1, z);
+            normalAoValue = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z)];
             topLeftAoLightValue = (instance.aoLightValueScratchXYZNNP + instance.aoLightValueScratchXYNN + instance.aoLightValueScratchYZNP + normalAoValue) / 4.0F;
             topRightAoLightValue = (instance.aoLightValueScratchYZNP + normalAoValue + instance.aoLightValueScratchXYZPNP + instance.aoLightValueScratchXYPN) / 4.0F;
             bottomRightAoLightValue = (normalAoValue + instance.aoLightValueScratchYZNN + instance.aoLightValueScratchXYPN + instance.aoLightValueScratchXYZPNN) / 4.0F;
@@ -159,10 +159,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessXYPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             instance.aoBrightnessYZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessYZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
-            instance.aoLightValueScratchXYNP = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z).getLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchXYPP = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z).getLightValue(instance.blockAccess,x + 1, y, z);
-            instance.aoLightValueScratchYZPN = CLBlockHelper.getBlock(instance.blockAccess,x, y, z - 1).getLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchYZPP = CLBlockHelper.getBlock(instance.blockAccess,x, y, z + 1).getLightValue(instance.blockAccess,x, y, z + 1);
+            instance.aoLightValueScratchXYNP = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z)];
+            instance.aoLightValueScratchXYPP = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z)];
+            instance.aoLightValueScratchYZPN = Block.lightValue[instance.blockAccess.getBlockId(x, y, z - 1)];
+            instance.aoLightValueScratchYZPP = Block.lightValue[instance.blockAccess.getBlockId(x, y, z + 1)];
             isAirish1P = instance.blockAccess.isAirBlock(x + 1, y, z);
             isAirish1N = instance.blockAccess.isAirBlock(x - 1, y, z);
             isAirish2P = instance.blockAccess.isAirBlock(x, y, z + 1);
@@ -172,7 +172,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXYNP;
                 instance.aoBrightnessXYZNPN = instance.aoBrightnessXYNP;
             } else {
-                instance.aoLightValueScratchXYZNPN = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z - 1).getLightValue(instance.blockAccess,x - 1, y, z - 1);
+                instance.aoLightValueScratchXYZNPN = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z - 1)];
                 instance.aoBrightnessXYZNPN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z - 1);
             }
 
@@ -180,7 +180,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPN = instance.aoLightValueScratchXYPP;
                 instance.aoBrightnessXYZPPN = instance.aoBrightnessXYPP;
             } else {
-                instance.aoLightValueScratchXYZPPN = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z - 1).getLightValue(instance.blockAccess,x + 1, y, z - 1);
+                instance.aoLightValueScratchXYZPPN = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z - 1)];
                 instance.aoBrightnessXYZPPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z - 1);
             }
 
@@ -188,7 +188,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPP = instance.aoLightValueScratchXYNP;
                 instance.aoBrightnessXYZNPP = instance.aoBrightnessXYNP;
             } else {
-                instance.aoLightValueScratchXYZNPP = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z + 1).getLightValue(instance.blockAccess,x - 1, y, z + 1);
+                instance.aoLightValueScratchXYZNPP = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z + 1)];
                 instance.aoBrightnessXYZNPP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z + 1);
             }
 
@@ -196,7 +196,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPP = instance.aoLightValueScratchXYPP;
                 instance.aoBrightnessXYZPPP = instance.aoBrightnessXYPP;
             } else {
-                instance.aoLightValueScratchXYZPPP = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z + 1).getLightValue(instance.blockAccess,x + 1, y, z + 1);
+                instance.aoLightValueScratchXYZPPP = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z + 1)];
                 instance.aoBrightnessXYZPPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z + 1);
             }
 
@@ -206,11 +206,11 @@ public class CLRenderBlocksHelper {
 
             brightnessScratchValue = blockBrightness;
 
-            if (instance.renderMaxY >= 1.0D || !CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z).isOpaqueCube()) {
+            if (instance.renderMaxY >= 1.0D || !instance.blockAccess.isBlockOpaqueCube(x, y + 1, z)) {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z).getLightValue(instance.blockAccess,x, y + 1, z);
+            normalAoValue = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z)];
             topRightAoLightValue = (instance.aoLightValueScratchXYZNPP + instance.aoLightValueScratchXYNP + instance.aoLightValueScratchYZPP + normalAoValue) / 4.0F;
             topLeftAoLightValue = (instance.aoLightValueScratchYZPP + normalAoValue + instance.aoLightValueScratchXYZPPP + instance.aoLightValueScratchXYPP) / 4.0F;
             bottomLeftAoLightValue = (normalAoValue + instance.aoLightValueScratchYZPN + instance.aoLightValueScratchXYPP + instance.aoLightValueScratchXYZPPN) / 4.0F;
@@ -246,10 +246,10 @@ public class CLRenderBlocksHelper {
                 --z;
             }
 
-            instance.aoLightValueScratchXZNN = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z).getLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchYZNN = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z).getLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchYZPN = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z).getLightValue(instance.blockAccess,x, y + 1, z);
-            instance.aoLightValueScratchXZPN = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z).getLightValue(instance.blockAccess,x + 1, y, z);
+            instance.aoLightValueScratchXZNN = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z)];
+            instance.aoLightValueScratchYZNN = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z)];
+            instance.aoLightValueScratchYZPN = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z)];
+            instance.aoLightValueScratchXZPN = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z)];
             instance.aoBrightnessXZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z);
             instance.aoBrightnessYZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessYZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
@@ -263,7 +263,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNNN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNNN = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y - 1, z).getLightValue(instance.blockAccess,x - 1, y - 1, z);
+                instance.aoLightValueScratchXYZNNN = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y - 1, z)];
                 instance.aoBrightnessXYZNNN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y - 1, z);
             }
 
@@ -271,7 +271,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNPN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNPN = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y + 1, z).getLightValue(instance.blockAccess,x - 1, y + 1, z);
+                instance.aoLightValueScratchXYZNPN = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y + 1, z)];
                 instance.aoBrightnessXYZNPN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y + 1, z);
             }
 
@@ -279,7 +279,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPNN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPNN = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y - 1, z).getLightValue(instance.blockAccess,x + 1, y - 1, z);
+                instance.aoLightValueScratchXYZPNN = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y - 1, z)];
                 instance.aoBrightnessXYZPNN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y - 1, z);
             }
 
@@ -287,7 +287,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPPN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPPN = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y + 1, z).getLightValue(instance.blockAccess,x + 1, y + 1, z);
+                instance.aoLightValueScratchXYZPPN = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y + 1, z)];
                 instance.aoBrightnessXYZPPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y + 1, z);
             }
 
@@ -297,11 +297,11 @@ public class CLRenderBlocksHelper {
 
             brightnessScratchValue = blockBrightness;
 
-            if (instance.renderMinZ <= 0.0D || !CLBlockHelper.getBlock(instance.blockAccess,x, y, z - 1).isOpaqueCube()) {
+            if (instance.renderMinZ <= 0.0D || !instance.blockAccess.isBlockOpaqueCube(x, y, z - 1)) {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             }
 
-            normalAoValue = CLBlockHelper.getBlock(instance.blockAccess,x, y, z - 1).getLightValue(instance.blockAccess,x, y, z - 1);
+            normalAoValue = Block.lightValue[instance.blockAccess.getBlockId(x, y, z - 1)];
             topLeftAoLightValue = (instance.aoLightValueScratchXZNN + instance.aoLightValueScratchXYZNPN + normalAoValue + instance.aoLightValueScratchYZPN) / 4.0F;
             bottomLeftAoLightValue = (normalAoValue + instance.aoLightValueScratchYZPN + instance.aoLightValueScratchXZPN + instance.aoLightValueScratchXYZPPN) / 4.0F;
             bottomRightAoLightValue = (instance.aoLightValueScratchYZNN + normalAoValue + instance.aoLightValueScratchXYZPNN + instance.aoLightValueScratchXZPN) / 4.0F;
@@ -361,10 +361,10 @@ public class CLRenderBlocksHelper {
                 ++z;
             }
 
-            instance.aoLightValueScratchXZNP = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z).getLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchXZPP = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z).getLightValue(instance.blockAccess,x + 1, y, z);
-            instance.aoLightValueScratchYZNP = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z).getLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchYZPP = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z).getLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXZNP = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z)];
+            instance.aoLightValueScratchXZPP = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z)];
+            instance.aoLightValueScratchYZNP = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z)];
+            instance.aoLightValueScratchYZPP = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z)];
             instance.aoBrightnessXZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z);
             instance.aoBrightnessXZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             instance.aoBrightnessYZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
@@ -378,7 +378,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNNP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNNP = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y - 1, z).getLightValue(instance.blockAccess,x - 1, y - 1, z);
+                instance.aoLightValueScratchXYZNNP = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y - 1, z)];
                 instance.aoBrightnessXYZNNP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y - 1, z);
             }
 
@@ -386,7 +386,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNPP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNPP = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y + 1, z).getLightValue(instance.blockAccess,x - 1, y + 1, z);
+                instance.aoLightValueScratchXYZNPP = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y + 1, z)];
                 instance.aoBrightnessXYZNPP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y + 1, z);
             }
 
@@ -394,7 +394,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPNP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPNP = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y - 1, z).getLightValue(instance.blockAccess,x + 1, y - 1, z);
+                instance.aoLightValueScratchXYZPNP = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y - 1, z)];
                 instance.aoBrightnessXYZPNP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y - 1, z);
             }
 
@@ -402,7 +402,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPPP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPPP = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y + 1, z).getLightValue(instance.blockAccess,x + 1, y + 1, z);
+                instance.aoLightValueScratchXYZPPP = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y + 1, z)];
                 instance.aoBrightnessXYZPPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y + 1, z);
             }
 
@@ -412,11 +412,11 @@ public class CLRenderBlocksHelper {
 
             brightnessScratchValue = blockBrightness;
 
-            if (instance.renderMaxZ >= 1.0D || !CLBlockHelper.getBlock(instance.blockAccess,x, y, z + 1).isOpaqueCube()) {
+            if (instance.renderMaxZ >= 1.0D || !instance.blockAccess.isBlockOpaqueCube(x, y, z + 1)) {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
             }
 
-            normalAoValue = CLBlockHelper.getBlock(instance.blockAccess,x, y, z + 1).getLightValue(instance.blockAccess,x, y, z + 1);
+            normalAoValue = Block.lightValue[instance.blockAccess.getBlockId(x, y, z + 1)];
             topLeftAoLightValue = (instance.aoLightValueScratchXZNP + instance.aoLightValueScratchXYZNPP + normalAoValue + instance.aoLightValueScratchYZPP) / 4.0F;
             topRightAoLightValue = (normalAoValue + instance.aoLightValueScratchYZPP + instance.aoLightValueScratchXZPP + instance.aoLightValueScratchXYZPPP) / 4.0F;
             bottomRightAoLightValue = (instance.aoLightValueScratchYZNP + normalAoValue + instance.aoLightValueScratchXYZPNP + instance.aoLightValueScratchXZPP) / 4.0F;
@@ -476,10 +476,10 @@ public class CLRenderBlocksHelper {
                 --x;
             }
 
-            instance.aoLightValueScratchXYNN = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z).getLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchXZNN = CLBlockHelper.getBlock(instance.blockAccess,x, y, z - 1).getLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchXZNP = CLBlockHelper.getBlock(instance.blockAccess,x, y, z + 1).getLightValue(instance.blockAccess,x, y, z + 1);
-            instance.aoLightValueScratchXYNP = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z).getLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXYNN = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z)];
+            instance.aoLightValueScratchXZNN = Block.lightValue[instance.blockAccess.getBlockId(x, y, z - 1)];
+            instance.aoLightValueScratchXZNP = Block.lightValue[instance.blockAccess.getBlockId(x, y, z + 1)];
+            instance.aoLightValueScratchXYNP = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z)];
             instance.aoBrightnessXYNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessXZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessXZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
@@ -493,7 +493,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNNN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNNN = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z - 1).getLightValue(instance.blockAccess,x, y - 1, z - 1);
+                instance.aoLightValueScratchXYZNNN = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z - 1)];
                 instance.aoBrightnessXYZNNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z - 1);
             }
 
@@ -501,7 +501,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNNP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNNP = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z + 1).getLightValue(instance.blockAccess,x, y - 1, z + 1);
+                instance.aoLightValueScratchXYZNNP = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z + 1)];
                 instance.aoBrightnessXYZNNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z + 1);
             }
 
@@ -509,7 +509,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNPN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNPN = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z - 1).getLightValue(instance.blockAccess,x, y + 1, z - 1);
+                instance.aoLightValueScratchXYZNPN = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z - 1)];
                 instance.aoBrightnessXYZNPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z - 1);
             }
 
@@ -517,7 +517,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNPP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNPP = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z + 1).getLightValue(instance.blockAccess,x, y + 1, z + 1);
+                instance.aoLightValueScratchXYZNPP = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z + 1)];
                 instance.aoBrightnessXYZNPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z + 1);
             }
 
@@ -527,11 +527,11 @@ public class CLRenderBlocksHelper {
 
             brightnessScratchValue = blockBrightness;
 
-            if (instance.renderMinX <= 0.0D || !CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z).isOpaqueCube()) {
+            if (instance.renderMinX <= 0.0D || !instance.blockAccess.isBlockOpaqueCube(x - 1, y, z)) {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlock(instance.blockAccess,x - 1, y, z).getLightValue(instance.blockAccess,x - 1, y, z);
+            normalAoValue = Block.lightValue[instance.blockAccess.getBlockId(x - 1, y, z)];
             topRightAoLightValue = (instance.aoLightValueScratchXYNN + instance.aoLightValueScratchXYZNNP + normalAoValue + instance.aoLightValueScratchXZNP) / 4.0F;
             topLeftAoLightValue = (normalAoValue + instance.aoLightValueScratchXZNP + instance.aoLightValueScratchXYNP + instance.aoLightValueScratchXYZNPP) / 4.0F;
             bottomLeftAoLightValue = (instance.aoLightValueScratchXZNN + normalAoValue + instance.aoLightValueScratchXYZNPN + instance.aoLightValueScratchXYNP) / 4.0F;
@@ -591,10 +591,10 @@ public class CLRenderBlocksHelper {
                 ++x;
             }
 
-            instance.aoLightValueScratchXYPN = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z).getLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchXZPN = CLBlockHelper.getBlock(instance.blockAccess,x, y, z - 1).getLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchXZPP = CLBlockHelper.getBlock(instance.blockAccess,x, y, z + 1).getLightValue(instance.blockAccess,x, y, z + 1);
-            instance.aoLightValueScratchXYPP = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z).getLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXYPN = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z)];
+            instance.aoLightValueScratchXZPN = Block.lightValue[instance.blockAccess.getBlockId(x, y, z - 1)];
+            instance.aoLightValueScratchXZPP = Block.lightValue[instance.blockAccess.getBlockId(x, y, z + 1)];
+            instance.aoLightValueScratchXYPP = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z)];
             instance.aoBrightnessXYPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessXZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessXZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
@@ -608,7 +608,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPNN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPNN = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z - 1).getLightValue(instance.blockAccess,x, y - 1, z - 1);
+                instance.aoLightValueScratchXYZPNN = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z - 1)];
                 instance.aoBrightnessXYZPNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z - 1);
             }
 
@@ -616,7 +616,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPNP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPNP = CLBlockHelper.getBlock(instance.blockAccess,x, y - 1, z + 1).getLightValue(instance.blockAccess,x, y - 1, z + 1);
+                instance.aoLightValueScratchXYZPNP = Block.lightValue[instance.blockAccess.getBlockId(x, y - 1, z + 1)];
                 instance.aoBrightnessXYZPNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z + 1);
             }
 
@@ -624,7 +624,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPPN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPPN = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z - 1).getLightValue(instance.blockAccess,x, y + 1, z - 1);
+                instance.aoLightValueScratchXYZPPN = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z - 1)];
                 instance.aoBrightnessXYZPPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z - 1);
             }
 
@@ -632,7 +632,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPPP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPPP = CLBlockHelper.getBlock(instance.blockAccess,x, y + 1, z + 1).getLightValue(instance.blockAccess,x, y + 1, z + 1);
+                instance.aoLightValueScratchXYZPPP = Block.lightValue[instance.blockAccess.getBlockId(x, y + 1, z + 1)];
                 instance.aoBrightnessXYZPPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z + 1);
             }
 
@@ -642,11 +642,11 @@ public class CLRenderBlocksHelper {
 
             brightnessScratchValue = blockBrightness;
 
-            if (instance.renderMaxX >= 1.0D || !CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z).isOpaqueCube()) {
+            if (instance.renderMaxX >= 1.0D || !instance.blockAccess.isBlockOpaqueCube(x + 1, y, z)) {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlock(instance.blockAccess,x + 1, y, z).getLightValue(instance.blockAccess,x + 1, y, z);
+            normalAoValue = Block.lightValue[instance.blockAccess.getBlockId(x + 1, y, z)];
             topLeftAoLightValue = (instance.aoLightValueScratchXYPN + instance.aoLightValueScratchXYZPNP + normalAoValue + instance.aoLightValueScratchXZPP) / 4.0F;
             bottomLeftAoLightValue = (instance.aoLightValueScratchXYZPNN + instance.aoLightValueScratchXYPN + instance.aoLightValueScratchXZPN + normalAoValue) / 4.0F;
             bottomRightAoLightValue = (instance.aoLightValueScratchXZPN + normalAoValue + instance.aoLightValueScratchXYZPPN + instance.aoLightValueScratchXYPP) / 4.0F;
@@ -719,1180 +719,1180 @@ public class CLRenderBlocksHelper {
      * @param par6 amount of green
      * @param par7 amount of blue
     public static boolean renderStandardBlockWithAmbientOcclusion(RenderBlocks renderBlocks, Block par1Block, int x, int y, int z, float par5, float par6, float par7)
-    {		
-    	renderBlocks.enableAO = true;
-    	boolean renderedSomething = false;
-    	float topLeftaoLightValueAvg = 0.0F;
-    	float bottomLeftaoLightValueAvg = 0.0F;
-    	float bottomRightaoLightValueAvg = 0.0F;
-    	float topRightaoLightValueAvg = 0.0F;
-    	boolean overrideBlockColor = true;
-    	int blockBrightnessWithColor = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z);
-    	Tessellator tessellator = Tessellator.instance;
-    	tessellator.setBrightness(983055); // 1111 0000 0000 0000 1111
-    	//float blockSunlightFactor;
-    	//float sunlightBrightnesss = renderBlocks.minecraftRB.theWorld.getSunBrightness(1.0f);
-    	
-    	if (renderBlocks.getBlockIcon(par1Block).getIconName().equals("grass_top"))
-    	{
-    		overrideBlockColor = false;
-    	}
-    	else if (renderBlocks.hasOverrideBlockTexture())
-    	{
-    		overrideBlockColor = false;
-    	}
+    {
+    renderBlocks.enableAO = true;
+    boolean renderedSomething = false;
+    float topLeftaoLightValueAvg = 0.0F;
+    float bottomLeftaoLightValueAvg = 0.0F;
+    float bottomRightaoLightValueAvg = 0.0F;
+    float topRightaoLightValueAvg = 0.0F;
+    boolean overrideBlockColor = true;
+    int blockBrightnessWithColor = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z);
+    Tessellator tessellator = Tessellator.instance;
+    tessellator.setBrightness(983055); // 1111 0000 0000 0000 1111
+    //float blockSunlightFactor;
+    //float sunlightBrightnesss = renderBlocks.minecraftRB.theWorld.getSunBrightness(1.0f);
 
-    	boolean canBlockGrassXYNN;
-    	boolean canBlockGrassXYPN;
-    	boolean canBlockGrassYZNN;
-    	boolean canBlockGrassYZNP;
-    	float neighborAoValue;
-    	int neighborLightValue;
+    if (renderBlocks.getBlockIcon(par1Block).getIconName().equals("grass_top"))
+    {
+    overrideBlockColor = false;
+    }
+    else if (renderBlocks.hasOverrideBlockTexture())
+    {
+    overrideBlockColor = false;
+    }
 
-    	//YYY-1
-    	if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y - 1, z, 0))
-    	{
-    		if (renderBlocks.renderMinY <= 0.0D)
-    		{
-    			--y;
-    		}
+    boolean canBlockGrassXYNN;
+    boolean canBlockGrassXYPN;
+    boolean canBlockGrassYZNN;
+    boolean canBlockGrassYZNP;
+    float neighborAoValue;
+    int neighborLightValue;
 
-    		renderBlocks.aoLightValueScratchXYNN = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
-    		renderBlocks.aoLightValueScratchYZNN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
-    		renderBlocks.aoLightValueScratchYZNP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
-    		renderBlocks.aoLightValueScratchXYPN = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
-    		renderBlocks.aoBrightnessXYNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
-    		renderBlocks.aoBrightnessYZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
-    		renderBlocks.aoBrightnessYZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
-    		renderBlocks.aoBrightnessXYPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
-    		canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getCanBlockGrass();
-    		canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getCanBlockGrass();
-    		canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getCanBlockGrass();
-    		canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getCanBlockGrass();
+    //YYY-1
+    if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y - 1, z, 0))
+    {
+    if (renderBlocks.renderMinY <= 0.0D)
+    {
+    --y;
+    }
 
-    		if (!canBlockGrassYZNN && !canBlockGrassXYNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.aoLightValueScratchXYNN;
-    			renderBlocks.aoBrightnessXYZNNN = renderBlocks.aoBrightnessXYNN;
-    		}
-    		else
-    		{
-    			
-    			renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z - 1);
-    		}
+    renderBlocks.aoLightValueScratchXYNN = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
+    renderBlocks.aoLightValueScratchYZNN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
+    renderBlocks.aoLightValueScratchYZNP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
+    renderBlocks.aoLightValueScratchXYPN = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
+    renderBlocks.aoBrightnessXYNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
+    renderBlocks.aoBrightnessYZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
+    renderBlocks.aoBrightnessYZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
+    renderBlocks.aoBrightnessXYPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
+    canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getCanBlockGrass();
+    canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getCanBlockGrass();
+    canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getCanBlockGrass();
+    canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getCanBlockGrass();
 
-    		if (!canBlockGrassYZNP && !canBlockGrassXYNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.aoLightValueScratchXYNN;
-    			renderBlocks.aoBrightnessXYZNNP = renderBlocks.aoBrightnessXYNN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z + 1);
-    		}
+    if (!canBlockGrassYZNN && !canBlockGrassXYNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.aoLightValueScratchXYNN;
+    renderBlocks.aoBrightnessXYZNNN = renderBlocks.aoBrightnessXYNN;
+    }
+    else
+    {
 
-    		if (!canBlockGrassYZNN && !canBlockGrassXYPN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.aoLightValueScratchXYPN;
-    			renderBlocks.aoBrightnessXYZPNN = renderBlocks.aoBrightnessXYPN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z - 1);
-    		}
+    renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z - 1);
+    }
 
-    		if (!canBlockGrassYZNP && !canBlockGrassXYPN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.aoLightValueScratchXYPN;
-    			renderBlocks.aoBrightnessXYZPNP = renderBlocks.aoBrightnessXYPN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z + 1);
-    		}
+    if (!canBlockGrassYZNP && !canBlockGrassXYNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.aoLightValueScratchXYNN;
+    renderBlocks.aoBrightnessXYZNNP = renderBlocks.aoBrightnessXYNN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z + 1);
+    }
 
-    		if (renderBlocks.renderMinY <= 0.0D)
-    		{
-    			++y;
-    		}
+    if (!canBlockGrassYZNN && !canBlockGrassXYPN)
+    {
+    renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.aoLightValueScratchXYPN;
+    renderBlocks.aoBrightnessXYZPNN = renderBlocks.aoBrightnessXYPN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z - 1);
+    }
 
-    		neighborLightValue = blockBrightnessWithColor;
+    if (!canBlockGrassYZNP && !canBlockGrassXYPN)
+    {
+    renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.aoLightValueScratchXYPN;
+    renderBlocks.aoBrightnessXYZPNP = renderBlocks.aoBrightnessXYPN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z + 1);
+    }
 
-    		if (renderBlocks.renderMinY <= 0.0D || !renderBlocks.blockAccess.getBlock(x, y - 1, z).isOpaqueCube())
-    		{
-    			neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
-    		}
+    if (renderBlocks.renderMinY <= 0.0D)
+    {
+    ++y;
+    }
 
-    		neighborAoValue = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
-    		topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNP + renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchYZNP + neighborAoValue) / 4.0F;
-    		topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchYZNP + neighborAoValue + renderBlocks.aoLightValueScratchXYZPNP + renderBlocks.aoLightValueScratchXYPN) / 4.0F;
-    		bottomRightaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZNN + renderBlocks.aoLightValueScratchXYPN + renderBlocks.aoLightValueScratchXYZPNN) / 4.0F;
-    		bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXYZNNN + neighborAoValue + renderBlocks.aoLightValueScratchYZNN) / 4.0F;
+    neighborLightValue = blockBrightnessWithColor;
 
-    		// BEGIN - GlitchLights
+    if (renderBlocks.renderMinY <= 0.0D || !renderBlocks.blockAccess.getBlock(x, y - 1, z).isOpaqueCube())
+    {
+    neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
+    }
 
-    		// Calculate the basic corner brightnesses
-    		renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNNP, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessYZNP, neighborLightValue);
-    		renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZNNN, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessYZNN, neighborLightValue);
-    		renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPNN, renderBlocks.aoBrightnessYZNN, renderBlocks.aoBrightnessXYPN, neighborLightValue);
-    		renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZPNP, renderBlocks.aoBrightnessYZNP, renderBlocks.aoBrightnessXYPN, neighborLightValue);
+    neighborAoValue = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
+    topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNP + renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchYZNP + neighborAoValue) / 4.0F;
+    topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchYZNP + neighborAoValue + renderBlocks.aoLightValueScratchXYZPNP + renderBlocks.aoLightValueScratchXYPN) / 4.0F;
+    bottomRightaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZNN + renderBlocks.aoLightValueScratchXYPN + renderBlocks.aoLightValueScratchXYZPNN) / 4.0F;
+    bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXYZNNN + neighborAoValue + renderBlocks.aoLightValueScratchYZNN) / 4.0F;
 
-    		// Calculate a basic corner color: x+ z+
-    		renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x+ z-
-    		renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z-
-    		renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z+
-    		renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // BEGIN - GlitchLights
 
-    		// If colors are applied to any corners
-    		if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
-    			// Calculate a rough brightness modifier for each corner color
-    			float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
-    			float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
-    			float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
-    			float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
+    // Calculate the basic corner brightnesses
+    renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNNP, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessYZNP, neighborLightValue);
+    renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZNNN, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessYZNN, neighborLightValue);
+    renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPNN, renderBlocks.aoBrightnessYZNN, renderBlocks.aoBrightnessXYPN, neighborLightValue);
+    renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZPNP, renderBlocks.aoBrightnessYZNP, renderBlocks.aoBrightnessXYPN, neighborLightValue);
 
-    			// Finalize the corner color: x+ z+
-    			renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
-    			renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
-    			renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
-    			// Finalize the corner color: x+ z-
-    			renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
-    			renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
-    			renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
-    			// Finalize the corner color: x- z-
-    			renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
-    			renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
-    			renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
-    			// Finalize the corner color: x- z+
-    			renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
-    			renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
-    			renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
-    		}
-    		// If no colors are applied to any of the corners
-    		else {
-    			// Reset the corners to white
-    			renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
-    		}
+    // Calculate a basic corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z-
+    renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z+
+    renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
 
-    		// If the block color is not being overridden
-    		if (overrideBlockColor) {
-    			renderBlocks.colorRedTopLeft       *= par5;
-    			renderBlocks.colorGreenTopLeft     *= par6;
-    			renderBlocks.colorBlueTopLeft      *= par7;
-    			renderBlocks.colorRedBottomLeft    *= par5;
-    			renderBlocks.colorGreenBottomLeft  *= par6;
-    			renderBlocks.colorBlueBottomLeft   *= par7;
-    			renderBlocks.colorRedBottomRight   *= par5;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorBlueBottomRight  *= par7;
-    			renderBlocks.colorRedTopRight      *= par5;
-    			renderBlocks.colorGreenTopRight    *= par6;
-    			renderBlocks.colorBlueTopRight     *= par7;
-    		}
+    // If colors are applied to any corners
+    if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
+    // Calculate a rough brightness modifier for each corner color
+    float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
+    float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
+    float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
+    float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
 
-    		// Apply shadows next to walls and highlights next to edges
-    		renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.5f;
-    		renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.5f;
-    		renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.5f;
-    		renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.5f;
-    		renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.5f;
-    		renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.5f;
-    		renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.5f;
-    		renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.5f;
-    		renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.5f;
-    		renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.5f;
-    		renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.5f;
-    		renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.5f;
+    // Finalize the corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
+    renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
+    renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
+    // Finalize the corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
+    renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
+    renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
+    // Finalize the corner color: x- z-
+    renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
+    renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
+    renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
+    // Finalize the corner color: x- z+
+    renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
+    renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
+    renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
+    }
+    // If no colors are applied to any of the corners
+    else {
+    // Reset the corners to white
+    renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
+    }
 
-    		// END - GlitchLights
+    // If the block color is not being overridden
+    if (overrideBlockColor) {
+    renderBlocks.colorRedTopLeft       *= par5;
+    renderBlocks.colorGreenTopLeft     *= par6;
+    renderBlocks.colorBlueTopLeft      *= par7;
+    renderBlocks.colorRedBottomLeft    *= par5;
+    renderBlocks.colorGreenBottomLeft  *= par6;
+    renderBlocks.colorBlueBottomLeft   *= par7;
+    renderBlocks.colorRedBottomRight   *= par5;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorBlueBottomRight  *= par7;
+    renderBlocks.colorRedTopRight      *= par5;
+    renderBlocks.colorGreenTopRight    *= par6;
+    renderBlocks.colorBlueTopRight     *= par7;
+    }
 
-    		renderBlocks.renderFaceYNeg(par1Block, (double)x, (double)y, (double)z, renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 0));
-    		renderedSomething = true;
-    	}
-    	//YYY+1
-    	if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y + 1, z, 1))
-    	{
-    		if (renderBlocks.renderMaxY >= 1.0D)
-    		{
-    			++y;
-    		}
-    		
-    		renderBlocks.aoLightValueScratchXYNP = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
-    		renderBlocks.aoLightValueScratchXYPP = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
-    		renderBlocks.aoLightValueScratchYZPN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
-    		renderBlocks.aoLightValueScratchYZPP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
-    		renderBlocks.aoBrightnessXYNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
-    		renderBlocks.aoBrightnessXYPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
-    		renderBlocks.aoBrightnessYZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
-    		renderBlocks.aoBrightnessYZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
-    		canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getCanBlockGrass();
-    		canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getCanBlockGrass();
-    		canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getCanBlockGrass();
-    		canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getCanBlockGrass();
+    // Apply shadows next to walls and highlights next to edges
+    renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.5f;
+    renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.5f;
+    renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.5f;
+    renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.5f;
+    renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.5f;
+    renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.5f;
+    renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.5f;
+    renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.5f;
+    renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.5f;
+    renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.5f;
+    renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.5f;
+    renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.5f;
 
-    		if (!canBlockGrassYZNN && !canBlockGrassXYNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.aoLightValueScratchXYNP;
-    			renderBlocks.aoBrightnessXYZNPN = renderBlocks.aoBrightnessXYNP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z - 1);
-    		}
+    // END - GlitchLights
 
-    		if (!canBlockGrassYZNN && !canBlockGrassXYPN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.aoLightValueScratchXYPP;
-    			renderBlocks.aoBrightnessXYZPPN = renderBlocks.aoBrightnessXYPP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z - 1);
-    		}
+    renderBlocks.renderFaceYNeg(par1Block, (double)x, (double)y, (double)z, renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 0));
+    renderedSomething = true;
+    }
+    //YYY+1
+    if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y + 1, z, 1))
+    {
+    if (renderBlocks.renderMaxY >= 1.0D)
+    {
+    ++y;
+    }
 
-    		if (!canBlockGrassYZNP && !canBlockGrassXYNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.aoLightValueScratchXYNP;
-    			renderBlocks.aoBrightnessXYZNPP = renderBlocks.aoBrightnessXYNP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z + 1);
-    		}
+    renderBlocks.aoLightValueScratchXYNP = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
+    renderBlocks.aoLightValueScratchXYPP = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
+    renderBlocks.aoLightValueScratchYZPN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
+    renderBlocks.aoLightValueScratchYZPP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
+    renderBlocks.aoBrightnessXYPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
+    renderBlocks.aoBrightnessYZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
+    renderBlocks.aoBrightnessYZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
+    canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getCanBlockGrass();
+    canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getCanBlockGrass();
+    canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getCanBlockGrass();
+    canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getCanBlockGrass();
 
-    		if (!canBlockGrassYZNP && !canBlockGrassXYPN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.aoLightValueScratchXYPP;
-    			renderBlocks.aoBrightnessXYZPPP = renderBlocks.aoBrightnessXYPP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z + 1);
-    		}
+    if (!canBlockGrassYZNN && !canBlockGrassXYNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.aoLightValueScratchXYNP;
+    renderBlocks.aoBrightnessXYZNPN = renderBlocks.aoBrightnessXYNP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z - 1);
+    }
 
-    		if (renderBlocks.renderMaxY >= 1.0D)
-    		{
-    			--y;
-    		}
+    if (!canBlockGrassYZNN && !canBlockGrassXYPN)
+    {
+    renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.aoLightValueScratchXYPP;
+    renderBlocks.aoBrightnessXYZPPN = renderBlocks.aoBrightnessXYPP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z - 1);
+    }
 
-    		neighborLightValue = blockBrightnessWithColor;
+    if (!canBlockGrassYZNP && !canBlockGrassXYNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.aoLightValueScratchXYNP;
+    renderBlocks.aoBrightnessXYZNPP = renderBlocks.aoBrightnessXYNP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z + 1);
+    }
 
-    		if (renderBlocks.renderMaxY >= 1.0D || !renderBlocks.blockAccess.getBlock(x, y + 1, z).isOpaqueCube())
-    		{
-    			neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
-    		}
+    if (!canBlockGrassYZNP && !canBlockGrassXYPN)
+    {
+    renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.aoLightValueScratchXYPP;
+    renderBlocks.aoBrightnessXYZPPP = renderBlocks.aoBrightnessXYPP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z + 1);
+    }
 
-    		//blockSunlightFactor = ((float)(neighborLightValue >> 20) / 30f) * sunlightBrightnesss;
-    		
-    		//if (blockSunlightFactor > 0.5f)
-    		//	blockSunlightFactor = 0.5f;
-    		
-    		
-    		neighborAoValue = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
-    		topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNPP + renderBlocks.aoLightValueScratchXYNP + renderBlocks.aoLightValueScratchYZPP + neighborAoValue) / 4.0F;
-    		topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchYZPP + neighborAoValue + renderBlocks.aoLightValueScratchXYZPPP + renderBlocks.aoLightValueScratchXYPP) / 4.0F;
-    		bottomLeftaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZPN + renderBlocks.aoLightValueScratchXYPP + renderBlocks.aoLightValueScratchXYZPPN) / 4.0F;
-    		bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYNP + renderBlocks.aoLightValueScratchXYZNPN + neighborAoValue + renderBlocks.aoLightValueScratchYZPN) / 4.0F;
+    if (renderBlocks.renderMaxY >= 1.0D)
+    {
+    --y;
+    }
 
-    		// BEGIN - GlitchLights
+    neighborLightValue = blockBrightnessWithColor;
 
-    		// Calculate the basic corner brightnesses for the top of the block
-    		renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZPPP, renderBlocks.aoBrightnessYZPP, renderBlocks.aoBrightnessXYPP, neighborLightValue);
-    		renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZPPN, renderBlocks.aoBrightnessYZPN, renderBlocks.aoBrightnessXYPP, neighborLightValue);
-    		renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZNPN, renderBlocks.aoBrightnessXYNP, renderBlocks.aoBrightnessYZPN, neighborLightValue);
-    		renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZNPP, renderBlocks.aoBrightnessXYNP, renderBlocks.aoBrightnessYZPP, neighborLightValue);
-    		
-    		// Calculate a basic corner color: x+ z+
-    		renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x+ z-
-    		renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z-
-    		renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z+
-    		renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    if (renderBlocks.renderMaxY >= 1.0D || !renderBlocks.blockAccess.getBlock(x, y + 1, z).isOpaqueCube())
+    {
+    neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
+    }
 
-    		// If colors are applied to any corners
-    		if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
-    			// Calculate a rough brightness modifier for each corner color
-    			float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
-    			float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
-    			float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
-    			float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
+    //blockSunlightFactor = ((float)(neighborLightValue >> 20) / 30f) * sunlightBrightnesss;
 
-    			// Finalize the corner color: x+ z+
-    			renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
-    			renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
-    			renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
-    			// Finalize the corner color: x+ z-
-    			renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
-    			renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
-    			renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
-    			// Finalize the corner color: x- z-
-    			renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight );
-    			renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight );
-    			renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight );
-    			// Finalize the corner color: x- z+
-    			renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
-    			renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
-    			renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );				
-    		}
-    		// If no colors are applied to any of the corners
-    		else {
-    			// Reset the corners to white
-    			renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
-    		}
+    //if (blockSunlightFactor > 0.5f)
+    //	blockSunlightFactor = 0.5f;
 
-    		// Apply shadows next to walls, highlights next to edges, and the supplied argument colors
-    		renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * par5;
-    		renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * par6;
-    		renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * par7;
-    		renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * par5;
-    		renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * par6;
-    		renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * par7;
-    		renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * par5;
-    		renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * par6;
-    		renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * par7;
-    		renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * par5;
-    		renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * par6;
-    		renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * par7;
 
-    		// END - GlitchLights
+    neighborAoValue = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
+    topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNPP + renderBlocks.aoLightValueScratchXYNP + renderBlocks.aoLightValueScratchYZPP + neighborAoValue) / 4.0F;
+    topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchYZPP + neighborAoValue + renderBlocks.aoLightValueScratchXYZPPP + renderBlocks.aoLightValueScratchXYPP) / 4.0F;
+    bottomLeftaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZPN + renderBlocks.aoLightValueScratchXYPP + renderBlocks.aoLightValueScratchXYZPPN) / 4.0F;
+    bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYNP + renderBlocks.aoLightValueScratchXYZNPN + neighborAoValue + renderBlocks.aoLightValueScratchYZPN) / 4.0F;
 
-    		renderBlocks.renderFaceYPos(par1Block, (double)x, (double)y, (double)z, renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 1));
-    		renderedSomething = true;
-    	}
+    // BEGIN - GlitchLights
 
-    	IIcon var22;
+    // Calculate the basic corner brightnesses for the top of the block
+    renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZPPP, renderBlocks.aoBrightnessYZPP, renderBlocks.aoBrightnessXYPP, neighborLightValue);
+    renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZPPN, renderBlocks.aoBrightnessYZPN, renderBlocks.aoBrightnessXYPP, neighborLightValue);
+    renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZNPN, renderBlocks.aoBrightnessXYNP, renderBlocks.aoBrightnessYZPN, neighborLightValue);
+    renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZNPP, renderBlocks.aoBrightnessXYNP, renderBlocks.aoBrightnessYZPP, neighborLightValue);
 
-    	if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y, z - 1, 2))
-    	{
-    		if (renderBlocks.renderMinZ <= 0.0D)
-    		{
-    			--z;
-    		}
+    // Calculate a basic corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z-
+    renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z+
+    renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
 
-    		renderBlocks.aoLightValueScratchXZNN = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
-    		renderBlocks.aoLightValueScratchYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
-    		renderBlocks.aoLightValueScratchYZPN = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
-    		renderBlocks.aoLightValueScratchXZPN = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
-    		renderBlocks.aoBrightnessXZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
-    		renderBlocks.aoBrightnessYZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
-    		renderBlocks.aoBrightnessYZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
-    		renderBlocks.aoBrightnessXZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
-    		canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getCanBlockGrass();
-    		canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getCanBlockGrass();
-    		canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getCanBlockGrass();
-    		canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getCanBlockGrass();
-    		
-    		if (!canBlockGrassXYNN && !canBlockGrassYZNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.aoLightValueScratchXZNN;
-    			renderBlocks.aoBrightnessXYZNNN = renderBlocks.aoBrightnessXZNN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZNNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y - 1, z);
-    		}
+    // If colors are applied to any corners
+    if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
+    // Calculate a rough brightness modifier for each corner color
+    float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
+    float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
+    float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
+    float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
 
-    		if (!canBlockGrassXYNN && !canBlockGrassYZNP)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.aoLightValueScratchXZNN;
-    			renderBlocks.aoBrightnessXYZNPN = renderBlocks.aoBrightnessXZNN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZNPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y + 1, z);
-    		}
+    // Finalize the corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
+    renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
+    renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
+    // Finalize the corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
+    renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
+    renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
+    // Finalize the corner color: x- z-
+    renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight );
+    renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight );
+    renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight );
+    // Finalize the corner color: x- z+
+    renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
+    renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
+    renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
+    }
+    // If no colors are applied to any of the corners
+    else {
+    // Reset the corners to white
+    renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
+    }
 
-    		if (!canBlockGrassXYPN && !canBlockGrassYZNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.aoLightValueScratchXZPN;
-    			renderBlocks.aoBrightnessXYZPNN = renderBlocks.aoBrightnessXZPN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZPNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y - 1, z);
-    		}
+    // Apply shadows next to walls, highlights next to edges, and the supplied argument colors
+    renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * par5;
+    renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * par6;
+    renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * par7;
+    renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * par5;
+    renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * par6;
+    renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * par7;
+    renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * par5;
+    renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * par6;
+    renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * par7;
+    renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * par5;
+    renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * par6;
+    renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * par7;
 
-    		if (!canBlockGrassXYPN && !canBlockGrassYZNP)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.aoLightValueScratchXZPN;
-    			renderBlocks.aoBrightnessXYZPPN = renderBlocks.aoBrightnessXZPN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZPPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y + 1, z);
-    		}
+    // END - GlitchLights
 
-    		if (renderBlocks.renderMinZ <= 0.0D)
-    		{
-    			++z;
-    		}
+    renderBlocks.renderFaceYPos(par1Block, (double)x, (double)y, (double)z, renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 1));
+    renderedSomething = true;
+    }
 
-    		neighborLightValue = blockBrightnessWithColor;
+    IIcon var22;
 
-    		if (renderBlocks.renderMinZ <= 0.0D || !renderBlocks.blockAccess.getBlock(x, y, z - 1).isOpaqueCube())
-    		{
-    			neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
-    		}
+    if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y, z - 1, 2))
+    {
+    if (renderBlocks.renderMinZ <= 0.0D)
+    {
+    --z;
+    }
 
-    		neighborAoValue = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
-    		topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXZNN + renderBlocks.aoLightValueScratchXYZNPN + neighborAoValue + renderBlocks.aoLightValueScratchYZPN) / 4.0F;
-    		bottomLeftaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZPN + renderBlocks.aoLightValueScratchXZPN + renderBlocks.aoLightValueScratchXYZPPN) / 4.0F;
-    		bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchYZNN + neighborAoValue + renderBlocks.aoLightValueScratchXYZPNN + renderBlocks.aoLightValueScratchXZPN) / 4.0F;
-    		topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNN + renderBlocks.aoLightValueScratchXZNN + renderBlocks.aoLightValueScratchYZNN + neighborAoValue) / 4.0F;
+    renderBlocks.aoLightValueScratchXZNN = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
+    renderBlocks.aoLightValueScratchYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
+    renderBlocks.aoLightValueScratchYZPN = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
+    renderBlocks.aoLightValueScratchXZPN = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
+    renderBlocks.aoBrightnessXZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
+    renderBlocks.aoBrightnessYZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
+    renderBlocks.aoBrightnessYZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
+    renderBlocks.aoBrightnessXZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
+    canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getCanBlockGrass();
+    canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getCanBlockGrass();
+    canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getCanBlockGrass();
+    canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getCanBlockGrass();
 
-    		// BEGIN - GlitchLights
+    if (!canBlockGrassXYNN && !canBlockGrassYZNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.aoLightValueScratchXZNN;
+    renderBlocks.aoBrightnessXYZNNN = renderBlocks.aoBrightnessXZNN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZNNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y - 1, z);
+    }
 
-    		// Calculate the basic corner brightnesses
+    if (!canBlockGrassXYNN && !canBlockGrassYZNP)
+    {
+    renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.aoLightValueScratchXZNN;
+    renderBlocks.aoBrightnessXYZNPN = renderBlocks.aoBrightnessXZNN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZNPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y + 1, z);
+    }
+
+    if (!canBlockGrassXYPN && !canBlockGrassYZNN)
+    {
+    renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.aoLightValueScratchXZPN;
+    renderBlocks.aoBrightnessXYZPNN = renderBlocks.aoBrightnessXZPN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZPNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y - 1, z);
+    }
+
+    if (!canBlockGrassXYPN && !canBlockGrassYZNP)
+    {
+    renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.aoLightValueScratchXZPN;
+    renderBlocks.aoBrightnessXYZPPN = renderBlocks.aoBrightnessXZPN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZPPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y + 1, z);
+    }
+
+    if (renderBlocks.renderMinZ <= 0.0D)
+    {
+    ++z;
+    }
+
+    neighborLightValue = blockBrightnessWithColor;
+
+    if (renderBlocks.renderMinZ <= 0.0D || !renderBlocks.blockAccess.getBlock(x, y, z - 1).isOpaqueCube())
+    {
+    neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
+    }
+
+    neighborAoValue = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
+    topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXZNN + renderBlocks.aoLightValueScratchXYZNPN + neighborAoValue + renderBlocks.aoLightValueScratchYZPN) / 4.0F;
+    bottomLeftaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZPN + renderBlocks.aoLightValueScratchXZPN + renderBlocks.aoLightValueScratchXYZPPN) / 4.0F;
+    bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchYZNN + neighborAoValue + renderBlocks.aoLightValueScratchXYZPNN + renderBlocks.aoLightValueScratchXZPN) / 4.0F;
+    topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNN + renderBlocks.aoLightValueScratchXZNN + renderBlocks.aoLightValueScratchYZNN + neighborAoValue) / 4.0F;
+
+    // BEGIN - GlitchLights
+
+    // Calculate the basic corner brightnesses
     //			renderBlocks.brightnessTopLeft     = ((renderBlocks.aoBrightnessXYZNPN & 15728880) + (renderBlocks.aoBrightnessXZNN & 15728880) + (renderBlocks.aoBrightnessYZPN & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomLeft  = ((renderBlocks.aoBrightnessXYZPPN & 15728880) + (renderBlocks.aoBrightnessYZPN & 15728880) + (renderBlocks.aoBrightnessXZPN & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomRight = ((renderBlocks.aoBrightnessXYZPNN & 15728880) + (renderBlocks.aoBrightnessYZNN & 15728880) + (renderBlocks.aoBrightnessXZPN & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessTopRight    = ((renderBlocks.aoBrightnessXYZNNN & 15728880) + (renderBlocks.aoBrightnessXZNN & 15728880) + (renderBlocks.aoBrightnessYZNN & 15728880) + (neighborLightValue & 15728880)) >> 2;
-    		renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNPN, renderBlocks.aoBrightnessXZNN, renderBlocks.aoBrightnessYZPN, neighborLightValue);
-    		renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZPPN, renderBlocks.aoBrightnessYZPN, renderBlocks.aoBrightnessXZPN, neighborLightValue);
-    		renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPNN, renderBlocks.aoBrightnessYZNN, renderBlocks.aoBrightnessXZPN, neighborLightValue);
-    		renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZNNN, renderBlocks.aoBrightnessXZNN, renderBlocks.aoBrightnessYZNN, neighborLightValue);
+    renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNPN, renderBlocks.aoBrightnessXZNN, renderBlocks.aoBrightnessYZPN, neighborLightValue);
+    renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZPPN, renderBlocks.aoBrightnessYZPN, renderBlocks.aoBrightnessXZPN, neighborLightValue);
+    renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPNN, renderBlocks.aoBrightnessYZNN, renderBlocks.aoBrightnessXZPN, neighborLightValue);
+    renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZNNN, renderBlocks.aoBrightnessXZNN, renderBlocks.aoBrightnessYZNN, neighborLightValue);
 
 
-    		// Calculate a basic corner color: x+ z+
-    		renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x+ z-
-    		renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z-
-    		renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z+
-    		renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 12) & 240) + ((renderBlocks.aoBrightnessYZPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z-
+    renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z+
+    renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((renderBlocks.aoBrightnessYZNN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
 
-    		// If colors are applied to any corners
-    		if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
-    			// Calculate a rough brightness modifier for each corner color
-    			float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
-    			float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
-    			float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
-    			float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
+    // If colors are applied to any corners
+    if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
+    // Calculate a rough brightness modifier for each corner color
+    float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
+    float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
+    float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
+    float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
 
-    			// Finalize the corner color: x+ z+
-    			renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
-    			renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
-    			renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
-    			// Finalize the corner color: x+ z-
-    			renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
-    			renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
-    			renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
-    			// Finalize the corner color: x- z-
-    			renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
-    			renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
-    			renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
-    			// Finalize the corner color: x- z+
-    			renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
-    			renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
-    			renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
-    		}
-    		// If no colors are applied to any of the corners
-    		else {
-    			// Reset the corners to white
-    			renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
-    		}
+    // Finalize the corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
+    renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
+    renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
+    // Finalize the corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
+    renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
+    renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
+    // Finalize the corner color: x- z-
+    renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
+    renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
+    renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
+    // Finalize the corner color: x- z+
+    renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
+    renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
+    renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
+    }
+    // If no colors are applied to any of the corners
+    else {
+    // Reset the corners to white
+    renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
+    }
 
-    		// If the block color is not being overridden
-    		if (overrideBlockColor) {
-    			renderBlocks.colorRedTopLeft       *= par5;
-    			renderBlocks.colorGreenTopLeft     *= par6;
-    			renderBlocks.colorBlueTopLeft      *= par7;
-    			renderBlocks.colorRedBottomLeft    *= par5;
-    			renderBlocks.colorGreenBottomLeft  *= par6;
-    			renderBlocks.colorBlueBottomLeft   *= par7;
-    			renderBlocks.colorRedBottomRight   *= par5;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorBlueBottomRight  *= par7;
-    			renderBlocks.colorRedTopRight      *= par5;
-    			renderBlocks.colorGreenTopRight    *= par6;
-    			renderBlocks.colorBlueTopRight     *= par7;
-    		}
+    // If the block color is not being overridden
+    if (overrideBlockColor) {
+    renderBlocks.colorRedTopLeft       *= par5;
+    renderBlocks.colorGreenTopLeft     *= par6;
+    renderBlocks.colorBlueTopLeft      *= par7;
+    renderBlocks.colorRedBottomLeft    *= par5;
+    renderBlocks.colorGreenBottomLeft  *= par6;
+    renderBlocks.colorBlueBottomLeft   *= par7;
+    renderBlocks.colorRedBottomRight   *= par5;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorBlueBottomRight  *= par7;
+    renderBlocks.colorRedTopRight      *= par5;
+    renderBlocks.colorGreenTopRight    *= par6;
+    renderBlocks.colorBlueTopRight     *= par7;
+    }
 
-    		// Apply shadows next to walls and highlights next to edges
-    		renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.8f;
-    		renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.8f;
-    		renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.8f;
-    		renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.8f;
-    		renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.8f;
-    		renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.8f;
-    		renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.8f;
+    // Apply shadows next to walls and highlights next to edges
+    renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.8f;
+    renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.8f;
+    renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.8f;
+    renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.8f;
+    renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.8f;
+    renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.8f;
+    renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.8f;
 
-    		// END - GlitchLights
+    // END - GlitchLights
 
-    		var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 2);
-    		renderBlocks.renderFaceZNeg(par1Block, (double)x, (double)y, (double)z, var22);
+    var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 2);
+    renderBlocks.renderFaceZNeg(par1Block, (double)x, (double)y, (double)z, var22);
 
-    		if (RenderBlocks.fancyGrass  && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
-    		{
-    			renderBlocks.colorRedTopLeft *= par5;
-    			renderBlocks.colorRedBottomLeft *= par5;
-    			renderBlocks.colorRedBottomRight *= par5;
-    			renderBlocks.colorRedTopRight *= par5;
-    			renderBlocks.colorGreenTopLeft *= par6;
-    			renderBlocks.colorGreenBottomLeft *= par6;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorGreenTopRight *= par6;
-    			renderBlocks.colorBlueTopLeft *= par7;
-    			renderBlocks.colorBlueBottomLeft *= par7;
-    			renderBlocks.colorBlueBottomRight *= par7;
-    			renderBlocks.colorBlueTopRight *= par7;
-    			renderBlocks.renderFaceZNeg(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-    		}
+    if (RenderBlocks.fancyGrass  && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
+    {
+    renderBlocks.colorRedTopLeft *= par5;
+    renderBlocks.colorRedBottomLeft *= par5;
+    renderBlocks.colorRedBottomRight *= par5;
+    renderBlocks.colorRedTopRight *= par5;
+    renderBlocks.colorGreenTopLeft *= par6;
+    renderBlocks.colorGreenBottomLeft *= par6;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorGreenTopRight *= par6;
+    renderBlocks.colorBlueTopLeft *= par7;
+    renderBlocks.colorBlueBottomLeft *= par7;
+    renderBlocks.colorBlueBottomRight *= par7;
+    renderBlocks.colorBlueTopRight *= par7;
+    renderBlocks.renderFaceZNeg(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
+    }
 
-    		renderedSomething = true;
-    	}
+    renderedSomething = true;
+    }
 
-    	//ZZZ+1
-    	if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y, z + 1, 3))
-    	{
-    		if (renderBlocks.renderMaxZ >= 1.0D)
-    		{
-    			++z;
-    		}
+    //ZZZ+1
+    if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x, y, z + 1, 3))
+    {
+    if (renderBlocks.renderMaxZ >= 1.0D)
+    {
+    ++z;
+    }
 
-    		renderBlocks.aoLightValueScratchXZNP = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
-    		renderBlocks.aoLightValueScratchXZPP = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
-    		renderBlocks.aoLightValueScratchYZNP = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
-    		renderBlocks.aoLightValueScratchYZPP = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
-    		renderBlocks.aoBrightnessXZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
-    		renderBlocks.aoBrightnessXZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
-    		renderBlocks.aoBrightnessYZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
-    		renderBlocks.aoBrightnessYZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
-    		canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getCanBlockGrass();
-    		canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getCanBlockGrass();
-    		canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getCanBlockGrass();
-    		canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getCanBlockGrass();
+    renderBlocks.aoLightValueScratchXZNP = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
+    renderBlocks.aoLightValueScratchXZPP = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();
+    renderBlocks.aoLightValueScratchYZNP = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
+    renderBlocks.aoLightValueScratchYZPP = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
+    renderBlocks.aoBrightnessXZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
+    renderBlocks.aoBrightnessYZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
+    renderBlocks.aoBrightnessYZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
+    canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getCanBlockGrass();
+    canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getCanBlockGrass();
+    canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getCanBlockGrass();
+    canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getCanBlockGrass();
 
-    		if (!canBlockGrassXYNN && !canBlockGrassYZNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.aoLightValueScratchXZNP;
-    			renderBlocks.aoBrightnessXYZNNP = renderBlocks.aoBrightnessXZNP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZNNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y - 1, z);
-    		}
+    if (!canBlockGrassXYNN && !canBlockGrassYZNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.aoLightValueScratchXZNP;
+    renderBlocks.aoBrightnessXYZNNP = renderBlocks.aoBrightnessXZNP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZNNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y - 1, z);
+    }
 
-    		if (!canBlockGrassXYNN && !canBlockGrassYZNP)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.aoLightValueScratchXZNP;
-    			renderBlocks.aoBrightnessXYZNPP = renderBlocks.aoBrightnessXZNP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZNPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y + 1, z);
-    		}
+    if (!canBlockGrassXYNN && !canBlockGrassYZNP)
+    {
+    renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.aoLightValueScratchXZNP;
+    renderBlocks.aoBrightnessXYZNPP = renderBlocks.aoBrightnessXZNP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZNPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y + 1, z);
+    }
 
-    		if (!canBlockGrassXYPN && !canBlockGrassYZNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.aoLightValueScratchXZPP;
-    			renderBlocks.aoBrightnessXYZPNP = renderBlocks.aoBrightnessXZPP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZPNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y - 1, z);
-    		}
+    if (!canBlockGrassXYPN && !canBlockGrassYZNN)
+    {
+    renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.aoLightValueScratchXZPP;
+    renderBlocks.aoBrightnessXYZPNP = renderBlocks.aoBrightnessXZPP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZPNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y - 1, z);
+    }
 
-    		if (!canBlockGrassXYPN && !canBlockGrassYZNP)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.aoLightValueScratchXZPP;
-    			renderBlocks.aoBrightnessXYZPPP = renderBlocks.aoBrightnessXZPP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getLightValue();
-    			renderBlocks.aoBrightnessXYZPPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y + 1, z);
-    		}
+    if (!canBlockGrassXYPN && !canBlockGrassYZNP)
+    {
+    renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.aoLightValueScratchXZPP;
+    renderBlocks.aoBrightnessXYZPPP = renderBlocks.aoBrightnessXZPP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYZPPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y + 1, z);
+    }
 
-    		if (renderBlocks.renderMaxZ >= 1.0D)
-    		{
-    			--z;
-    		}
+    if (renderBlocks.renderMaxZ >= 1.0D)
+    {
+    --z;
+    }
 
-    		neighborLightValue = blockBrightnessWithColor;
+    neighborLightValue = blockBrightnessWithColor;
 
-    		if (renderBlocks.renderMaxZ >= 1.0D || !renderBlocks.blockAccess.getBlock(x, y, z + 1).isOpaqueCube())
-    		{
-    			neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
-    		}
+    if (renderBlocks.renderMaxZ >= 1.0D || !renderBlocks.blockAccess.getBlock(x, y, z + 1).isOpaqueCube())
+    {
+    neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
+    }
 
-    		neighborAoValue = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
-    		topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXZNP + renderBlocks.aoLightValueScratchXYZNPP + neighborAoValue + renderBlocks.aoLightValueScratchYZPP) / 4.0F;
-    		topRightaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZPP + renderBlocks.aoLightValueScratchXZPP + renderBlocks.aoLightValueScratchXYZPPP) / 4.0F;
-    		bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchYZNP + neighborAoValue + renderBlocks.aoLightValueScratchXYZPNP + renderBlocks.aoLightValueScratchXZPP) / 4.0F;
-    		bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNP + renderBlocks.aoLightValueScratchXZNP + renderBlocks.aoLightValueScratchYZNP + neighborAoValue) / 4.0F;
+    neighborAoValue = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
+    topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXZNP + renderBlocks.aoLightValueScratchXYZNPP + neighborAoValue + renderBlocks.aoLightValueScratchYZPP) / 4.0F;
+    topRightaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchYZPP + renderBlocks.aoLightValueScratchXZPP + renderBlocks.aoLightValueScratchXYZPPP) / 4.0F;
+    bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchYZNP + neighborAoValue + renderBlocks.aoLightValueScratchXYZPNP + renderBlocks.aoLightValueScratchXZPP) / 4.0F;
+    bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNP + renderBlocks.aoLightValueScratchXZNP + renderBlocks.aoLightValueScratchYZNP + neighborAoValue) / 4.0F;
 
-    		// BEGIN - GlitchLights
+    // BEGIN - GlitchLights
 
-    		// Calculate the basic corner brightnesses
+    // Calculate the basic corner brightnesses
     //			renderBlocks.brightnessTopLeft     = ((renderBlocks.aoBrightnessXYZNPP & 15728880) + (renderBlocks.aoBrightnessXZNP & 15728880) + (renderBlocks.aoBrightnessYZPP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomLeft  = ((renderBlocks.aoBrightnessXYZNNP & 15728880) + (renderBlocks.aoBrightnessYZNP & 15728880) + (renderBlocks.aoBrightnessXZNP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomRight = ((renderBlocks.aoBrightnessXYZPNP & 15728880) + (renderBlocks.aoBrightnessYZNP & 15728880) + (renderBlocks.aoBrightnessXZPP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessTopRight    = ((renderBlocks.aoBrightnessXYZPPP & 15728880) + (renderBlocks.aoBrightnessXZPP & 15728880) + (renderBlocks.aoBrightnessYZPP & 15728880) + (neighborLightValue & 15728880)) >> 2;
-    		renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNPP, renderBlocks.aoBrightnessXZNP, renderBlocks.aoBrightnessYZPP, neighborLightValue);
-    		renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZNNP, renderBlocks.aoBrightnessYZNP, renderBlocks.aoBrightnessXZNP, neighborLightValue);
-    		renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPNP, renderBlocks.aoBrightnessYZNP, renderBlocks.aoBrightnessXZPP, neighborLightValue);
-    		renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZPPP, renderBlocks.aoBrightnessXZPP, renderBlocks.aoBrightnessYZPP, neighborLightValue);
+    renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNPP, renderBlocks.aoBrightnessXZNP, renderBlocks.aoBrightnessYZPP, neighborLightValue);
+    renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZNNP, renderBlocks.aoBrightnessYZNP, renderBlocks.aoBrightnessXZNP, neighborLightValue);
+    renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPNP, renderBlocks.aoBrightnessYZNP, renderBlocks.aoBrightnessXZPP, neighborLightValue);
+    renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZPPP, renderBlocks.aoBrightnessXZPP, renderBlocks.aoBrightnessYZPP, neighborLightValue);
 
-    		// Calculate a basic corner color: x+ z+
-    		renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x+ z-
-    		renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z-
-    		renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z+
-    		renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z-
+    renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 12) & 240) + ((renderBlocks.aoBrightnessYZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z+
+    renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessYZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((renderBlocks.aoBrightnessYZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
 
-    		// If colors are applied to any corners
-    		if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
-    			// Calculate a rough brightness modifier for each corner color
-    			float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
-    			float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
-    			float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
-    			float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
+    // If colors are applied to any corners
+    if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
+    // Calculate a rough brightness modifier for each corner color
+    float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
+    float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
+    float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
+    float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
 
-    			// Finalize the corner color: x+ z+
-    			renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
-    			renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
-    			renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
-    			// Finalize the corner color: x+ z-
-    			renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
-    			renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
-    			renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
-    			// Finalize the corner color: x- z-
-    			renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
-    			renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
-    			renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
-    			// Finalize the corner color: x- z+
-    			renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
-    			renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
-    			renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
-    		}
-    		// If no colors are applied to any of the corners
-    		else {
-    			// Reset the corners to white
-    			renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
-    		}
+    // Finalize the corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
+    renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
+    renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
+    // Finalize the corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
+    renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
+    renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
+    // Finalize the corner color: x- z-
+    renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
+    renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
+    renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
+    // Finalize the corner color: x- z+
+    renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
+    renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
+    renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
+    }
+    // If no colors are applied to any of the corners
+    else {
+    // Reset the corners to white
+    renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
+    }
 
-    		// If the block color is not being overridden
-    		if (overrideBlockColor) {
-    			renderBlocks.colorRedTopLeft       *= par5;
-    			renderBlocks.colorGreenTopLeft     *= par6;
-    			renderBlocks.colorBlueTopLeft      *= par7;
-    			renderBlocks.colorRedBottomLeft    *= par5;
-    			renderBlocks.colorGreenBottomLeft  *= par6;
-    			renderBlocks.colorBlueBottomLeft   *= par7;
-    			renderBlocks.colorRedBottomRight   *= par5;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorBlueBottomRight  *= par7;
-    			renderBlocks.colorRedTopRight      *= par5;
-    			renderBlocks.colorGreenTopRight    *= par6;
-    			renderBlocks.colorBlueTopRight     *= par7;
-    		}
+    // If the block color is not being overridden
+    if (overrideBlockColor) {
+    renderBlocks.colorRedTopLeft       *= par5;
+    renderBlocks.colorGreenTopLeft     *= par6;
+    renderBlocks.colorBlueTopLeft      *= par7;
+    renderBlocks.colorRedBottomLeft    *= par5;
+    renderBlocks.colorGreenBottomLeft  *= par6;
+    renderBlocks.colorBlueBottomLeft   *= par7;
+    renderBlocks.colorRedBottomRight   *= par5;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorBlueBottomRight  *= par7;
+    renderBlocks.colorRedTopRight      *= par5;
+    renderBlocks.colorGreenTopRight    *= par6;
+    renderBlocks.colorBlueTopRight     *= par7;
+    }
 
-    		// Apply shadows next to walls and highlights next to edges
-    		renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.8f;
-    		renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.8f;
-    		renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.8f;
-    		renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.8f;
-    		renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.8f;
-    		renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.8f;
-    		renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.8f;
-    		renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.8f;
+    // Apply shadows next to walls and highlights next to edges
+    renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.8f;
+    renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.8f;
+    renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.8f;
+    renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.8f;
+    renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.8f;
+    renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.8f;
+    renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.8f;
+    renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.8f;
 
-    		// END - GlitchLights
+    // END - GlitchLights
 
-    		var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 3);
-    		renderBlocks.renderFaceZPos(par1Block, (double)x, (double)y, (double)z, renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 3));
+    var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 3);
+    renderBlocks.renderFaceZPos(par1Block, (double)x, (double)y, (double)z, renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 3));
 
-    		if (RenderBlocks.fancyGrass  && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
-    		{
-    			renderBlocks.colorRedTopLeft *= par5;
-    			renderBlocks.colorRedBottomLeft *= par5;
-    			renderBlocks.colorRedBottomRight *= par5;
-    			renderBlocks.colorRedTopRight *= par5;
-    			renderBlocks.colorGreenTopLeft *= par6;
-    			renderBlocks.colorGreenBottomLeft *= par6;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorGreenTopRight *= par6;
-    			renderBlocks.colorBlueTopLeft *= par7;
-    			renderBlocks.colorBlueBottomLeft *= par7;
-    			renderBlocks.colorBlueBottomRight *= par7;
-    			renderBlocks.colorBlueTopRight *= par7;
-    			renderBlocks.renderFaceZPos(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-    		}
+    if (RenderBlocks.fancyGrass  && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
+    {
+    renderBlocks.colorRedTopLeft *= par5;
+    renderBlocks.colorRedBottomLeft *= par5;
+    renderBlocks.colorRedBottomRight *= par5;
+    renderBlocks.colorRedTopRight *= par5;
+    renderBlocks.colorGreenTopLeft *= par6;
+    renderBlocks.colorGreenBottomLeft *= par6;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorGreenTopRight *= par6;
+    renderBlocks.colorBlueTopLeft *= par7;
+    renderBlocks.colorBlueBottomLeft *= par7;
+    renderBlocks.colorBlueBottomRight *= par7;
+    renderBlocks.colorBlueTopRight *= par7;
+    renderBlocks.renderFaceZPos(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
+    }
 
-    		renderedSomething = true;
-    	}
+    renderedSomething = true;
+    }
 
-    	if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x - 1, y, z, 4))
-    	{
-    		if (renderBlocks.renderMinX <= 0.0D)
-    		{
-    			--x;
-    		}
+    if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x - 1, y, z, 4))
+    {
+    if (renderBlocks.renderMinX <= 0.0D)
+    {
+    --x;
+    }
 
-    		renderBlocks.aoLightValueScratchXYNN = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
-    		renderBlocks.aoLightValueScratchXZNN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
-    		renderBlocks.aoLightValueScratchXZNP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
-    		renderBlocks.aoLightValueScratchXYNP = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
-    		renderBlocks.aoBrightnessXYNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
-    		renderBlocks.aoBrightnessXZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
-    		renderBlocks.aoBrightnessXZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
-    		renderBlocks.aoBrightnessXYNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
-    		canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getCanBlockGrass();
-    		canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getCanBlockGrass();
-    		canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getCanBlockGrass();
-    		canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getCanBlockGrass();
+    renderBlocks.aoLightValueScratchXYNN = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
+    renderBlocks.aoLightValueScratchXZNN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
+    renderBlocks.aoLightValueScratchXZNP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
+    renderBlocks.aoLightValueScratchXYNP = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
+    renderBlocks.aoBrightnessXZNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
+    renderBlocks.aoBrightnessXZNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
+    renderBlocks.aoBrightnessXYNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
+    canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x - 1, y + 1, z).getCanBlockGrass();
+    canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x - 1, y - 1, z).getCanBlockGrass();
+    canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x - 1, y, z - 1).getCanBlockGrass();
+    canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x - 1, y, z + 1).getCanBlockGrass();
 
-    		if (!canBlockGrassYZNP && !canBlockGrassXYNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.aoLightValueScratchXZNN;
-    			renderBlocks.aoBrightnessXYZNNN = renderBlocks.aoBrightnessXZNN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z - 1);
-    		}
+    if (!canBlockGrassYZNP && !canBlockGrassXYNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.aoLightValueScratchXZNN;
+    renderBlocks.aoBrightnessXYZNNN = renderBlocks.aoBrightnessXZNN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z - 1);
+    }
 
-    		if (!canBlockGrassYZNN && !canBlockGrassXYNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.aoLightValueScratchXZNP;
-    			renderBlocks.aoBrightnessXYZNNP = renderBlocks.aoBrightnessXZNP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z + 1);
-    		}
+    if (!canBlockGrassYZNN && !canBlockGrassXYNN)
+    {
+    renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.aoLightValueScratchXZNP;
+    renderBlocks.aoBrightnessXYZNNP = renderBlocks.aoBrightnessXZNP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNNP = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z + 1);
+    }
 
-    		if (!canBlockGrassYZNP && !canBlockGrassXYPN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.aoLightValueScratchXZNN;
-    			renderBlocks.aoBrightnessXYZNPN = renderBlocks.aoBrightnessXZNN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z - 1);
-    		}
+    if (!canBlockGrassYZNP && !canBlockGrassXYPN)
+    {
+    renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.aoLightValueScratchXZNN;
+    renderBlocks.aoBrightnessXYZNPN = renderBlocks.aoBrightnessXZNN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNPN = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z - 1);
+    }
 
-    		if (!canBlockGrassYZNN && !canBlockGrassXYPN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.aoLightValueScratchXZNP;
-    			renderBlocks.aoBrightnessXYZNPP = renderBlocks.aoBrightnessXZNP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZNPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z + 1);
-    		}
+    if (!canBlockGrassYZNN && !canBlockGrassXYPN)
+    {
+    renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.aoLightValueScratchXZNP;
+    renderBlocks.aoBrightnessXYZNPP = renderBlocks.aoBrightnessXZNP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZNPP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZNPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z + 1);
+    }
 
-    		if (renderBlocks.renderMinX <= 0.0D)
-    		{
-    			++x;
-    		}
+    if (renderBlocks.renderMinX <= 0.0D)
+    {
+    ++x;
+    }
 
-    		neighborLightValue = blockBrightnessWithColor;
+    neighborLightValue = blockBrightnessWithColor;
 
-    		if (renderBlocks.renderMinX <= 0.0D || !renderBlocks.blockAccess.getBlock(x - 1, y, z).isOpaqueCube())
-    		{
-    			neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
-    		}
+    if (renderBlocks.renderMinX <= 0.0D || !renderBlocks.blockAccess.getBlock(x - 1, y, z).isOpaqueCube())
+    {
+    neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x - 1, y, z);
+    }
 
-    		neighborAoValue = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
-    		topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXYZNNP + neighborAoValue + renderBlocks.aoLightValueScratchXZNP) / 4.0F;
-    		topLeftaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchXZNP + renderBlocks.aoLightValueScratchXYNP + renderBlocks.aoLightValueScratchXYZNPP) / 4.0F;
-    		bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXZNN + neighborAoValue + renderBlocks.aoLightValueScratchXYZNPN + renderBlocks.aoLightValueScratchXYNP) / 4.0F;
-    		bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNN + renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXZNN + neighborAoValue) / 4.0F;
+    neighborAoValue = renderBlocks.blockAccess.getBlock(x - 1, y, z).getLightValue();
+    topRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXYZNNP + neighborAoValue + renderBlocks.aoLightValueScratchXZNP) / 4.0F;
+    topLeftaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchXZNP + renderBlocks.aoLightValueScratchXYNP + renderBlocks.aoLightValueScratchXYZNPP) / 4.0F;
+    bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXZNN + neighborAoValue + renderBlocks.aoLightValueScratchXYZNPN + renderBlocks.aoLightValueScratchXYNP) / 4.0F;
+    bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZNNN + renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXZNN + neighborAoValue) / 4.0F;
 
-    		// BEGIN - GlitchLights
+    // BEGIN - GlitchLights
 
-    		// Calculate the basic corner brightnesses
+    // Calculate the basic corner brightnesses
     //			renderBlocks.brightnessTopLeft     = ((renderBlocks.aoBrightnessXYZNPP & 15728880) + (renderBlocks.aoBrightnessXZNP & 15728880) + (renderBlocks.aoBrightnessXYNP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomLeft  = ((renderBlocks.aoBrightnessXYZNPN & 15728880) + (renderBlocks.aoBrightnessXZNN & 15728880) + (renderBlocks.aoBrightnessXYNP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomRight = ((renderBlocks.aoBrightnessXYZNNN & 15728880) + (renderBlocks.aoBrightnessXYNN & 15728880) + (renderBlocks.aoBrightnessXZNN & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessTopRight    = ((renderBlocks.aoBrightnessXYZNNP & 15728880) + (renderBlocks.aoBrightnessXYNN & 15728880) + (renderBlocks.aoBrightnessXZNP & 15728880) + (neighborLightValue & 15728880)) >> 2;
-    		renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNPP, renderBlocks.aoBrightnessXZNP, renderBlocks.aoBrightnessXYNP, neighborLightValue);
-    		renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZNPN, renderBlocks.aoBrightnessXZNN, renderBlocks.aoBrightnessXYNP, neighborLightValue);
-    		renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZNNN, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessXZNN, neighborLightValue);
-    		renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZNNP, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessXZNP, neighborLightValue);
+    renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZNPP, renderBlocks.aoBrightnessXZNP, renderBlocks.aoBrightnessXYNP, neighborLightValue);
+    renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZNPN, renderBlocks.aoBrightnessXZNN, renderBlocks.aoBrightnessXYNP, neighborLightValue);
+    renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZNNN, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessXZNN, neighborLightValue);
+    renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZNNP, renderBlocks.aoBrightnessXYNN, renderBlocks.aoBrightnessXZNP, neighborLightValue);
 
-    		// Calculate a basic corner color: x+ z+
-    		renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x+ z-
-    		renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z-
-    		renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z+
-    		renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZNPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZNPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z-
+    renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZNNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z+
+    renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZNP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZNNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYNN >> 12) & 240) + ((renderBlocks.aoBrightnessXZNP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
 
-    		// If colors are applied to any corners
-    		if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
-    			// Calculate a rough brightness modifier for each corner color
-    			float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
-    			float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
-    			float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
-    			float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
+    // If colors are applied to any corners
+    if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
+    // Calculate a rough brightness modifier for each corner color
+    float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
+    float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
+    float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
+    float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
 
-    			// Finalize the corner color: x+ z+
-    			renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
-    			renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
-    			renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
-    			// Finalize the corner color: x+ z-
-    			renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
-    			renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
-    			renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
-    			// Finalize the corner color: x- z-
-    			renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
-    			renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
-    			renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
-    			// Finalize the corner color: x- z+
-    			renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
-    			renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
-    			renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
-    		}
-    		// If no colors are applied to any of the corners
-    		else {
-    			// Reset the corners to white
-    			renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
-    		}
+    // Finalize the corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
+    renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
+    renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
+    // Finalize the corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
+    renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
+    renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
+    // Finalize the corner color: x- z-
+    renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
+    renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
+    renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
+    // Finalize the corner color: x- z+
+    renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
+    renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
+    renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
+    }
+    // If no colors are applied to any of the corners
+    else {
+    // Reset the corners to white
+    renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
+    }
 
-    		// If the block color is not being overridden
-    		if (overrideBlockColor) {
-    			renderBlocks.colorRedTopLeft       *= par5;
-    			renderBlocks.colorGreenTopLeft     *= par6;
-    			renderBlocks.colorBlueTopLeft      *= par7;
-    			renderBlocks.colorRedBottomLeft    *= par5;
-    			renderBlocks.colorGreenBottomLeft  *= par6;
-    			renderBlocks.colorBlueBottomLeft   *= par7;
-    			renderBlocks.colorRedBottomRight   *= par5;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorBlueBottomRight  *= par7;
-    			renderBlocks.colorRedTopRight      *= par5;
-    			renderBlocks.colorGreenTopRight    *= par6;
-    			renderBlocks.colorBlueTopRight     *= par7;
-    		}
+    // If the block color is not being overridden
+    if (overrideBlockColor) {
+    renderBlocks.colorRedTopLeft       *= par5;
+    renderBlocks.colorGreenTopLeft     *= par6;
+    renderBlocks.colorBlueTopLeft      *= par7;
+    renderBlocks.colorRedBottomLeft    *= par5;
+    renderBlocks.colorGreenBottomLeft  *= par6;
+    renderBlocks.colorBlueBottomLeft   *= par7;
+    renderBlocks.colorRedBottomRight   *= par5;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorBlueBottomRight  *= par7;
+    renderBlocks.colorRedTopRight      *= par5;
+    renderBlocks.colorGreenTopRight    *= par6;
+    renderBlocks.colorBlueTopRight     *= par7;
+    }
 
-    		// Apply shadows next to walls and highlights next to edges
-    		renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.6f;
-    		renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.6f;
-    		renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.6f;
-    		renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.6f;
-    		renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.6f;
-    		renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.6f;
-    		renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.6f;
+    // Apply shadows next to walls and highlights next to edges
+    renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.6f;
+    renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.6f;
+    renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.6f;
+    renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.6f;
+    renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.6f;
+    renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.6f;
+    renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.6f;
 
-    		// END - GlitchLights
+    // END - GlitchLights
 
-    		var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 4);
-    		renderBlocks.renderFaceXNeg(par1Block, (double)x, (double)y, (double)z, var22);
+    var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 4);
+    renderBlocks.renderFaceXNeg(par1Block, (double)x, (double)y, (double)z, var22);
 
-    		if (RenderBlocks.fancyGrass  && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
-    		{
-    			renderBlocks.colorRedTopLeft *= par5;
-    			renderBlocks.colorRedBottomLeft *= par5;
-    			renderBlocks.colorRedBottomRight *= par5;
-    			renderBlocks.colorRedTopRight *= par5;
-    			renderBlocks.colorGreenTopLeft *= par6;
-    			renderBlocks.colorGreenBottomLeft *= par6;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorGreenTopRight *= par6;
-    			renderBlocks.colorBlueTopLeft *= par7;
-    			renderBlocks.colorBlueBottomLeft *= par7;
-    			renderBlocks.colorBlueBottomRight *= par7;
-    			renderBlocks.colorBlueTopRight *= par7;
-    			renderBlocks.renderFaceXNeg(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-    		}
+    if (RenderBlocks.fancyGrass  && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
+    {
+    renderBlocks.colorRedTopLeft *= par5;
+    renderBlocks.colorRedBottomLeft *= par5;
+    renderBlocks.colorRedBottomRight *= par5;
+    renderBlocks.colorRedTopRight *= par5;
+    renderBlocks.colorGreenTopLeft *= par6;
+    renderBlocks.colorGreenBottomLeft *= par6;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorGreenTopRight *= par6;
+    renderBlocks.colorBlueTopLeft *= par7;
+    renderBlocks.colorBlueBottomLeft *= par7;
+    renderBlocks.colorBlueBottomRight *= par7;
+    renderBlocks.colorBlueTopRight *= par7;
+    renderBlocks.renderFaceXNeg(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
+    }
 
-    		renderedSomething = true;
-    	}
+    renderedSomething = true;
+    }
 
-    	//XXX+1
-    	if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x + 1, y, z, 5))
-    	{
-    		if (renderBlocks.renderMaxX >= 1.0D)
-    		{
-    			++x;
-    		}
+    //XXX+1
+    if (renderBlocks.renderAllFaces || par1Block.shouldSideBeRendered(renderBlocks.blockAccess, x + 1, y, z, 5))
+    {
+    if (renderBlocks.renderMaxX >= 1.0D)
+    {
+    ++x;
+    }
 
-    		renderBlocks.aoLightValueScratchXYPN = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
-    		renderBlocks.aoLightValueScratchXZPN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
-    		renderBlocks.aoLightValueScratchXZPP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
-    		renderBlocks.aoLightValueScratchXYPP = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
-    		renderBlocks.aoBrightnessXYPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
-    		renderBlocks.aoBrightnessXZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
-    		renderBlocks.aoBrightnessXZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
-    		renderBlocks.aoBrightnessXYPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
-    		canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getCanBlockGrass();
-    		canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getCanBlockGrass();
-    		canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getCanBlockGrass();
-    		canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getCanBlockGrass();
+    renderBlocks.aoLightValueScratchXYPN = renderBlocks.blockAccess.getBlock(x, y - 1, z).getLightValue();
+    renderBlocks.aoLightValueScratchXZPN = renderBlocks.blockAccess.getBlock(x, y, z - 1).getLightValue();
+    renderBlocks.aoLightValueScratchXZPP = renderBlocks.blockAccess.getBlock(x, y, z + 1).getLightValue();
+    renderBlocks.aoLightValueScratchXYPP = renderBlocks.blockAccess.getBlock(x, y + 1, z).getLightValue();
+    renderBlocks.aoBrightnessXYPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z);
+    renderBlocks.aoBrightnessXZPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z - 1);
+    renderBlocks.aoBrightnessXZPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y, z + 1);
+    renderBlocks.aoBrightnessXYPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z);
+    canBlockGrassXYPN = renderBlocks.blockAccess.getBlock(x + 1, y + 1, z).getCanBlockGrass();
+    canBlockGrassXYNN = renderBlocks.blockAccess.getBlock(x + 1, y - 1, z).getCanBlockGrass();
+    canBlockGrassYZNP = renderBlocks.blockAccess.getBlock(x + 1, y, z + 1).getCanBlockGrass();
+    canBlockGrassYZNN = renderBlocks.blockAccess.getBlock(x + 1, y, z - 1).getCanBlockGrass();
 
-    		if (!canBlockGrassXYNN && !canBlockGrassYZNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.aoLightValueScratchXZPN;
-    			renderBlocks.aoBrightnessXYZPNN = renderBlocks.aoBrightnessXZPN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z - 1);
-    		}
+    if (!canBlockGrassXYNN && !canBlockGrassYZNN)
+    {
+    renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.aoLightValueScratchXZPN;
+    renderBlocks.aoBrightnessXYZPNN = renderBlocks.aoBrightnessXZPN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPNN = renderBlocks.blockAccess.getBlock(x, y - 1, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPNN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z - 1);
+    }
 
-    		if (!canBlockGrassXYNN && !canBlockGrassYZNP)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.aoLightValueScratchXZPP;
-    			renderBlocks.aoBrightnessXYZPNP = renderBlocks.aoBrightnessXZPP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z + 1);
-    		}
+    if (!canBlockGrassXYNN && !canBlockGrassYZNP)
+    {
+    renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.aoLightValueScratchXZPP;
+    renderBlocks.aoBrightnessXYZPNP = renderBlocks.aoBrightnessXZPP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPNP = renderBlocks.blockAccess.getBlock(x, y - 1, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPNP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y - 1, z + 1);
+    }
 
-    		if (!canBlockGrassXYPN && !canBlockGrassYZNN)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.aoLightValueScratchXZPN;
-    			renderBlocks.aoBrightnessXYZPPN = renderBlocks.aoBrightnessXZPN;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z - 1);
-    		}
+    if (!canBlockGrassXYPN && !canBlockGrassYZNN)
+    {
+    renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.aoLightValueScratchXZPN;
+    renderBlocks.aoBrightnessXYZPPN = renderBlocks.aoBrightnessXZPN;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPPN = renderBlocks.blockAccess.getBlock(x, y + 1, z - 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPPN = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z - 1);
+    }
 
-    		if (!canBlockGrassXYPN && !canBlockGrassYZNP)
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.aoLightValueScratchXZPP;
-    			renderBlocks.aoBrightnessXYZPPP = renderBlocks.aoBrightnessXZPP;
-    		}
-    		else
-    		{
-    			renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getLightValue();
-    			renderBlocks.aoBrightnessXYZPPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z + 1);
-    		}
+    if (!canBlockGrassXYPN && !canBlockGrassYZNP)
+    {
+    renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.aoLightValueScratchXZPP;
+    renderBlocks.aoBrightnessXYZPPP = renderBlocks.aoBrightnessXZPP;
+    }
+    else
+    {
+    renderBlocks.aoLightValueScratchXYZPPP = renderBlocks.blockAccess.getBlock(x, y + 1, z + 1).getLightValue();
+    renderBlocks.aoBrightnessXYZPPP = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x, y + 1, z + 1);
+    }
 
-    		if (renderBlocks.renderMaxX >= 1.0D)
-    		{
-    			--x;
-    		}
+    if (renderBlocks.renderMaxX >= 1.0D)
+    {
+    --x;
+    }
 
-    		neighborLightValue = blockBrightnessWithColor;
+    neighborLightValue = blockBrightnessWithColor;
 
-    		if (renderBlocks.renderMaxX >= 1.0D || !renderBlocks.blockAccess.getBlock(x + 1, y, z).isOpaqueCube())
-    		{
-    			neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
-    		}
+    if (renderBlocks.renderMaxX >= 1.0D || !renderBlocks.blockAccess.getBlock(x + 1, y, z).isOpaqueCube())
+    {
+    neighborLightValue = CLBlockHelper.getMixedBrightnessForBlockWithColor(renderBlocks.blockAccess, x + 1, y, z);
+    }
 
-    		neighborAoValue = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();;
-    		topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYPN + renderBlocks.aoLightValueScratchXYZPNP + neighborAoValue + renderBlocks.aoLightValueScratchXZPP) / 4.0F;
-    		bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZPNN + renderBlocks.aoLightValueScratchXYPN + renderBlocks.aoLightValueScratchXZPN + neighborAoValue) / 4.0F;
-    		bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXZPN + neighborAoValue + renderBlocks.aoLightValueScratchXYZPPN + renderBlocks.aoLightValueScratchXYPP) / 4.0F;
-    		topRightaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchXZPP + renderBlocks.aoLightValueScratchXYPP + renderBlocks.aoLightValueScratchXYZPPP) / 4.0F;
+    neighborAoValue = renderBlocks.blockAccess.getBlock(x + 1, y, z).getLightValue();;
+    topLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYPN + renderBlocks.aoLightValueScratchXYZPNP + neighborAoValue + renderBlocks.aoLightValueScratchXZPP) / 4.0F;
+    bottomLeftaoLightValueAvg = (renderBlocks.aoLightValueScratchXYZPNN + renderBlocks.aoLightValueScratchXYPN + renderBlocks.aoLightValueScratchXZPN + neighborAoValue) / 4.0F;
+    bottomRightaoLightValueAvg = (renderBlocks.aoLightValueScratchXZPN + neighborAoValue + renderBlocks.aoLightValueScratchXYZPPN + renderBlocks.aoLightValueScratchXYPP) / 4.0F;
+    topRightaoLightValueAvg = (neighborAoValue + renderBlocks.aoLightValueScratchXZPP + renderBlocks.aoLightValueScratchXYPP + renderBlocks.aoLightValueScratchXYZPPP) / 4.0F;
 
-    		// BEGIN - GlitchLights
+    // BEGIN - GlitchLights
 
-    		// Calculate the basic corner brightnesses
+    // Calculate the basic corner brightnesses
     //			renderBlocks.brightnessTopLeft     = ((renderBlocks.aoBrightnessXYZPNP & 15728880) + (renderBlocks.aoBrightnessXYPN & 15728880) + (renderBlocks.aoBrightnessXZPP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomLeft  = ((renderBlocks.aoBrightnessXYZPNN & 15728880) + (renderBlocks.aoBrightnessXYPN & 15728880) + (renderBlocks.aoBrightnessXZPN & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessBottomRight = ((renderBlocks.aoBrightnessXYZPPN & 15728880) + (renderBlocks.aoBrightnessXZPN & 15728880) + (renderBlocks.aoBrightnessXYPP & 15728880) + (neighborLightValue & 15728880)) >> 2;
     //			renderBlocks.brightnessTopRight    = ((renderBlocks.aoBrightnessXYZPPP & 15728880) + (renderBlocks.aoBrightnessXZPP & 15728880) + (renderBlocks.aoBrightnessXYPP & 15728880) + (neighborLightValue & 15728880)) >> 2;
-    		renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZPNP, renderBlocks.aoBrightnessXYPN, renderBlocks.aoBrightnessXZPP, neighborLightValue);
-    		renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZPNN, renderBlocks.aoBrightnessXYPN, renderBlocks.aoBrightnessXZPN, neighborLightValue);
-    		renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPPN, renderBlocks.aoBrightnessXZPN, renderBlocks.aoBrightnessXYPP, neighborLightValue);
-    		renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZPPP, renderBlocks.aoBrightnessXZPP, renderBlocks.aoBrightnessXYPP, neighborLightValue);
+    renderBlocks.brightnessTopLeft     = getAoBrightness(renderBlocks.aoBrightnessXYZPNP, renderBlocks.aoBrightnessXYPN, renderBlocks.aoBrightnessXZPP, neighborLightValue);
+    renderBlocks.brightnessBottomLeft  = getAoBrightness(renderBlocks.aoBrightnessXYZPNN, renderBlocks.aoBrightnessXYPN, renderBlocks.aoBrightnessXZPN, neighborLightValue);
+    renderBlocks.brightnessBottomRight = getAoBrightness(renderBlocks.aoBrightnessXYZPPN, renderBlocks.aoBrightnessXZPN, renderBlocks.aoBrightnessXYPP, neighborLightValue);
+    renderBlocks.brightnessTopRight    = getAoBrightness(renderBlocks.aoBrightnessXYZPPP, renderBlocks.aoBrightnessXZPP, renderBlocks.aoBrightnessXYPP, neighborLightValue);
 
-    		// Calculate a basic corner color: x+ z+
-    		renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x+ z-
-    		renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z-
-    		renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
-    		// Calculate a basic corner color: x- z+
-    		renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
-    		renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopLeft     = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopLeft      = ((float) ((((renderBlocks.aoBrightnessXYZPNP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomLeft  = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomLeft   = ((float) ((((renderBlocks.aoBrightnessXYZPNN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z-
+    renderBlocks.colorRedBottomRight   = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenBottomRight = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPN >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueBottomRight  = ((float) ((((renderBlocks.aoBrightnessXYZPPN >> 12) & 240) + ((renderBlocks.aoBrightnessXZPN >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
+    // Calculate a basic corner color: x- z+
+    renderBlocks.colorRedTopRight      = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 4 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 4 ) & 240) + ((neighborLightValue >> 4 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorGreenTopRight    = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXZPP >> 8 ) & 240) + ((renderBlocks.aoBrightnessXYPP >> 8 ) & 240) + ((neighborLightValue >> 8 ) & 240)) >> 2) / 240f);
+    renderBlocks.colorBlueTopRight     = ((float) ((((renderBlocks.aoBrightnessXYZPPP >> 12) & 240) + ((renderBlocks.aoBrightnessXZPP >> 12) & 240) + ((renderBlocks.aoBrightnessXYPP >> 12) & 240) + ((neighborLightValue >> 12) & 240)) >> 2) / 240f);
 
-    		// If colors are applied to any corners
-    		if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
-    			// Calculate a rough brightness modifier for each corner color
-    			float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
-    			float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
-    			float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
-    			float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
+    // If colors are applied to any corners
+    if ((renderBlocks.colorRedTopLeft + renderBlocks.colorGreenTopLeft + renderBlocks.colorBlueTopLeft + renderBlocks.colorRedBottomLeft + renderBlocks.colorGreenBottomLeft + renderBlocks.colorBlueBottomLeft + renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight + renderBlocks.colorRedTopRight + renderBlocks.colorGreenTopRight + renderBlocks.colorBlueTopRight) > 0f) {
+    // Calculate a rough brightness modifier for each corner color
+    float brightnessTopLeft     = (1f - ((renderBlocks.colorRedTopLeft     + renderBlocks.colorGreenTopLeft     + renderBlocks.colorBlueTopLeft    ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopLeft     & 240))) / 240f);
+    float brightnessBottomLeft  = (1f - ((renderBlocks.colorRedBottomLeft  + renderBlocks.colorGreenBottomLeft  + renderBlocks.colorBlueBottomLeft ) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomLeft  & 240))) / 240f);
+    float brightnessBottomRight = (1f - ((renderBlocks.colorRedBottomRight + renderBlocks.colorGreenBottomRight + renderBlocks.colorBlueBottomRight) / 3f)) * (((float) (240 - (renderBlocks.brightnessBottomRight & 240))) / 240f);
+    float brightnessTopRight    = (1f - ((renderBlocks.colorRedTopRight    + renderBlocks.colorGreenTopRight    + renderBlocks.colorBlueTopRight   ) / 3f)) * (((float) (240 - (renderBlocks.brightnessTopRight    & 240))) / 240f);
 
-    			// Finalize the corner color: x+ z+
-    			renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
-    			renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
-    			renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
-    			// Finalize the corner color: x+ z-
-    			renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
-    			renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
-    			renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
-    			// Finalize the corner color: x- z-
-    			renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
-    			renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
-    			renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
-    			// Finalize the corner color: x- z+
-    			renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
-    			renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
-    			renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
-    		}
-    		// If no colors are applied to any of the corners
-    		else {
-    			// Reset the corners to white
-    			renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
-    		}
+    // Finalize the corner color: x+ z+
+    renderBlocks.colorRedTopLeft       = Math.min(1f, renderBlocks.colorRedTopLeft       + brightnessTopLeft    );
+    renderBlocks.colorGreenTopLeft     = Math.min(1f, renderBlocks.colorGreenTopLeft     + brightnessTopLeft    );
+    renderBlocks.colorBlueTopLeft      = Math.min(1f, renderBlocks.colorBlueTopLeft      + brightnessTopLeft    );
+    // Finalize the corner color: x+ z-
+    renderBlocks.colorRedBottomLeft    = Math.min(1f, renderBlocks.colorRedBottomLeft    + brightnessBottomLeft );
+    renderBlocks.colorGreenBottomLeft  = Math.min(1f, renderBlocks.colorGreenBottomLeft  + brightnessBottomLeft );
+    renderBlocks.colorBlueBottomLeft   = Math.min(1f, renderBlocks.colorBlueBottomLeft   + brightnessBottomLeft );
+    // Finalize the corner color: x- z-
+    renderBlocks.colorRedBottomRight   = Math.min(1f, renderBlocks.colorRedBottomRight   + brightnessBottomRight);
+    renderBlocks.colorGreenBottomRight = Math.min(1f, renderBlocks.colorGreenBottomRight + brightnessBottomRight);
+    renderBlocks.colorBlueBottomRight  = Math.min(1f, renderBlocks.colorBlueBottomRight  + brightnessBottomRight);
+    // Finalize the corner color: x- z+
+    renderBlocks.colorRedTopRight      = Math.min(1f, renderBlocks.colorRedTopRight      + brightnessTopRight   );
+    renderBlocks.colorGreenTopRight    = Math.min(1f, renderBlocks.colorGreenTopRight    + brightnessTopRight   );
+    renderBlocks.colorBlueTopRight     = Math.min(1f, renderBlocks.colorBlueTopRight     + brightnessTopRight   );
+    }
+    // If no colors are applied to any of the corners
+    else {
+    // Reset the corners to white
+    renderBlocks.colorRedTopLeft = renderBlocks.colorGreenTopLeft = renderBlocks.colorBlueTopLeft = renderBlocks.colorRedBottomLeft = renderBlocks.colorGreenBottomLeft = renderBlocks.colorBlueBottomLeft = renderBlocks.colorRedBottomRight = renderBlocks.colorGreenBottomRight = renderBlocks.colorBlueBottomRight = renderBlocks.colorRedTopRight = renderBlocks.colorGreenTopRight = renderBlocks.colorBlueTopRight = 1f;
+    }
 
-    		// If the block color is not being overridden
-    		if (overrideBlockColor) {
-    			renderBlocks.colorRedTopLeft       *= par5;
-    			renderBlocks.colorGreenTopLeft     *= par6;
-    			renderBlocks.colorBlueTopLeft      *= par7;
-    			renderBlocks.colorRedBottomLeft    *= par5;
-    			renderBlocks.colorGreenBottomLeft  *= par6;
-    			renderBlocks.colorBlueBottomLeft   *= par7;
-    			renderBlocks.colorRedBottomRight   *= par5;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorBlueBottomRight  *= par7;
-    			renderBlocks.colorRedTopRight      *= par5;
-    			renderBlocks.colorGreenTopRight    *= par6;
-    			renderBlocks.colorBlueTopRight     *= par7;
-    		}
+    // If the block color is not being overridden
+    if (overrideBlockColor) {
+    renderBlocks.colorRedTopLeft       *= par5;
+    renderBlocks.colorGreenTopLeft     *= par6;
+    renderBlocks.colorBlueTopLeft      *= par7;
+    renderBlocks.colorRedBottomLeft    *= par5;
+    renderBlocks.colorGreenBottomLeft  *= par6;
+    renderBlocks.colorBlueBottomLeft   *= par7;
+    renderBlocks.colorRedBottomRight   *= par5;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorBlueBottomRight  *= par7;
+    renderBlocks.colorRedTopRight      *= par5;
+    renderBlocks.colorGreenTopRight    *= par6;
+    renderBlocks.colorBlueTopRight     *= par7;
+    }
 
-    		// Apply shadows next to walls and highlights next to edges
-    		renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.6f;
-    		renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.6f;
-    		renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.6f;
-    		renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.6f;
-    		renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.6f;
-    		renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.6f;
-    		renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.6f;
-    		renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.6f;
+    // Apply shadows next to walls and highlights next to edges
+    renderBlocks.colorRedTopLeft       *= topLeftaoLightValueAvg  * 0.6f;
+    renderBlocks.colorGreenTopLeft     *= topLeftaoLightValueAvg  * 0.6f;
+    renderBlocks.colorBlueTopLeft      *= topLeftaoLightValueAvg  * 0.6f;
+    renderBlocks.colorRedBottomLeft    *= bottomLeftaoLightValueAvg * 0.6f;
+    renderBlocks.colorGreenBottomLeft  *= bottomLeftaoLightValueAvg * 0.6f;
+    renderBlocks.colorBlueBottomLeft   *= bottomLeftaoLightValueAvg * 0.6f;
+    renderBlocks.colorRedBottomRight   *= bottomRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorGreenBottomRight *= bottomRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorBlueBottomRight  *= bottomRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorRedTopRight      *= topRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorGreenTopRight    *= topRightaoLightValueAvg * 0.6f;
+    renderBlocks.colorBlueTopRight     *= topRightaoLightValueAvg * 0.6f;
 
-    		// END - GlitchLights
+    // END - GlitchLights
 
-    		var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 5);
-    		renderBlocks.renderFaceXPos(par1Block, (double)x, (double)y, (double)z, var22);
+    var22 = renderBlocks.getBlockIcon(par1Block, renderBlocks.blockAccess, x, y, z, 5);
+    renderBlocks.renderFaceXPos(par1Block, (double)x, (double)y, (double)z, var22);
 
-    		if (RenderBlocks.fancyGrass && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
-    		{
-    			renderBlocks.colorRedTopLeft *= par5;
-    			renderBlocks.colorRedBottomLeft *= par5;
-    			renderBlocks.colorRedBottomRight *= par5;
-    			renderBlocks.colorRedTopRight *= par5;
-    			renderBlocks.colorGreenTopLeft *= par6;
-    			renderBlocks.colorGreenBottomLeft *= par6;
-    			renderBlocks.colorGreenBottomRight *= par6;
-    			renderBlocks.colorGreenTopRight *= par6;
-    			renderBlocks.colorBlueTopLeft *= par7;
-    			renderBlocks.colorBlueBottomLeft *= par7;
-    			renderBlocks.colorBlueBottomRight *= par7;
-    			renderBlocks.colorBlueTopRight *= par7;
-    			renderBlocks.renderFaceXPos(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
-    		}
+    if (RenderBlocks.fancyGrass && var22.getIconName().equals("grass_side") && !renderBlocks.hasOverrideBlockTexture())
+    {
+    renderBlocks.colorRedTopLeft *= par5;
+    renderBlocks.colorRedBottomLeft *= par5;
+    renderBlocks.colorRedBottomRight *= par5;
+    renderBlocks.colorRedTopRight *= par5;
+    renderBlocks.colorGreenTopLeft *= par6;
+    renderBlocks.colorGreenBottomLeft *= par6;
+    renderBlocks.colorGreenBottomRight *= par6;
+    renderBlocks.colorGreenTopRight *= par6;
+    renderBlocks.colorBlueTopLeft *= par7;
+    renderBlocks.colorBlueBottomLeft *= par7;
+    renderBlocks.colorBlueBottomRight *= par7;
+    renderBlocks.colorBlueTopRight *= par7;
+    renderBlocks.renderFaceXPos(par1Block, (double)x, (double)y, (double)z, BlockGrass.getIconSideOverlay());
+    }
 
-    		renderedSomething = true;
-    	}
+    renderedSomething = true;
+    }
 
-    	renderBlocks.enableAO = false;		
-    	return renderedSomething;
+    renderBlocks.enableAO = false;
+    return renderedSomething;
     }
      */
 
     /**
      * Renders a standard cube block at the given coordinates, with a given color ratio.  Args: block, x, y, z, r, g, b
-     *
-     * Accepts and tints blocks according to their colored light value 
+     * <p>
+     * Accepts and tints blocks according to their colored light value
      * CptSpaceToaster
-     * 
+     * <p>
      * 03-05-2014 heaton84 - Ported to helper method, refactored to match 1.7.2 architecture
      */
     public static boolean renderStandardBlockWithColorMultiplier(RenderBlocks instance, Block par1Block, int par2X, int par3Y, int par4Z, float par5R, float par6G, float par7B) {
