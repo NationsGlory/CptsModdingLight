@@ -13,6 +13,12 @@ public class CLBlockHelper {
         return Block.blocksList[iBlockAccess.getBlockId(x, y, z)];
     }
 
+    public static float getBlockAmbientOcclusionLightValue(IBlockAccess iBlockAccess, int x, int y, int z) {
+        Block block =  Block.blocksList[iBlockAccess.getBlockId(x,y,z)];
+
+        return block != null ? block.getAmbientOcclusionLightValue(iBlockAccess, x, y, z) : 1.0f;
+    }
+
     public static Block setLightValue(Block interceptedReturnValue, Block instance, float par1) {
         // Clamp negative values
         if (par1 < 0.0F) {
