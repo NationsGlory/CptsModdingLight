@@ -12,7 +12,7 @@ import static coloredlightscore.src.asm.ColoredLightsCoreLoadingPlugin.CLLog;
 
 public class TransformPlayerInstance extends MethodTransformer {
 
-    private final String PLAYER_INSTANCE_CLASSNAME = "net.minecraft.server.management.PlayerManager$PlayerInstance";
+    private final String PLAYER_INSTANCE_CLASSNAME = "net.minecraft.server.management.PlayerInstance";
     private final String SEND_TO_ALL_PLAYERS_WATCHING_CHUNK = "sendToAllPlayersWatchingChunk (Lnet/minecraft/network/Packet;)V";
 
     public TransformPlayerInstance() {

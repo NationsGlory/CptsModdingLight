@@ -13,7 +13,7 @@ public class TransformWorld extends HelperMethodTransformer {
     String methodsToReplace[] = {"getBlockLightValue_do (IIIZ)I",
             "getLightBrightnessForSkyBlocks (IIII)I",
             "computeLightValue (IIILnet/minecraft/world/EnumSkyBlock;)I",
-            "updateLightByType (Lnet/minecraft/world/EnumSkyBlock;III)Z"};
+            "updateLightByType (Lnet/minecraft/world/EnumSkyBlock;III)V"};
 
     public TransformWorld() {
         // Inform HelperMethodTransformer which class we are interested in

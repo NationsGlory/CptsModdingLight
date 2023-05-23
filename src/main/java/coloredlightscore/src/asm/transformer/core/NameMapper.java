@@ -42,7 +42,7 @@ public class NameMapper {
 
         // Block
         registerSrgName("CL: net/minecraft/block/Block net/minecraft/block/Block");
-        registerSrgName("MD: net/minecraft/block/Block/setLightLevel (F)Lnet/minecraft/block/Block; net/minecraft/block/Block/func_149715_a (F)Lnet/minecraft/block/Block;");
+        registerSrgName("MD: net/minecraft/block/Block/setLightValue (F)Lnet/minecraft/block/Block; net/minecraft/block/Block/func_71900_a (F)Lnet/minecraft/block/Block;");
 
         // Chunk
         registerSrgName("CL: net/minecraft/world/chunk/Chunk net/minecraft/world/chunk/Chunk");
@@ -78,19 +78,22 @@ public class NameMapper {
         registerSrgName("MD: net/minecraft/client/renderer/OpenGlHelper/setLightmapTextureCoords (IFF)V net/minecraft/client/renderer/OpenGlHelper/func_77475_a (IFF)V");
 
         // PlayerInstance
-        registerSrgName("CL: net/minecraft/server/management/PlayerManager$PlayerInstance net/minecraft/server/management/PlayerManager$PlayerInstance");
-        registerSrgName("MD: net/minecraft/server/management/PlayerManager$PlayerInstance/sendToAllPlayersWatchingChunk (Lnet/minecraft/network/Packet;)V net/minecraft/server/management/PlayerManager$PlayerInstance/func_151251_a (Lnet/minecraft/network/Packet;)V");
-        registerSrgName("FD: net/minecraft/server/management/PlayerManager$PlayerInstance/chunkLocation net/minecraft/server/management/PlayerManager$PlayerInstance/field_73264_c");
+        registerSrgName("CL: net/minecraft/server/management/PlayerInstance net/minecraft/server/management/PlayerInstance");
+        registerSrgName("MD: net/minecraft/server/management/PlayerInstance/sendToAllPlayersWatchingChunk (Lnet/minecraft/network/packet/Packet;)V net/minecraft/server/management/PlayerInstance/func_73256_a (Lnet/minecraft/network/packet/Packet;)V");
+        registerSrgName("FD: net/minecraft/server/management/PlayerInstance/chunkLocation net/minecraft/server/management/PlayerInstance/field_73264_c");
 
         registerSrgName("CL: net/minecraft/client/renderer/entity/Render net/minecraft/client/renderer/entity/Render");
         registerSrgName("MD: net/minecraft/client/renderer/entity/Render/renderEntityOnFire (Lnet/minecraft/entity/Entity;DDDF)V net/minecraft/client/renderer/entity/Render/func_76977_a (Lnet/minecraft/entity/Entity;DDDF)V");
 
         // RenderBlocks
         registerSrgName("CL: net/minecraft/client/renderer/RenderBlocks net/minecraft/client/renderer/RenderBlocks");
-        registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderStandardBlockWithAmbientOcclusion (Lnet/minecraft/block/Block;IIIFFF)Z net/minecraft/client/renderer/RenderBlocks/func_147751_a (Lnet/minecraft/block/Block;IIIFFF)Z");
-        registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderStandardBlockWithAmbientOcclusionPartial (Lnet/minecraft/block/Block;IIIFFF)Z net/minecraft/client/renderer/RenderBlocks/func_147808_b (Lnet/minecraft/block/Block;IIIFFF)Z");
-        registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderStandardBlockWithColorMultiplier (Lnet/minecraft/block/Block;IIIFFF)Z net/minecraft/client/renderer/RenderBlocks/func_147736_d (Lnet/minecraft/block/Block;IIIFFF)Z");
+        registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderStandardBlockWithAmbientOcclusionPartial (Lnet/minecraft/block/Block;IIIFFF)Z net/minecraft/client/renderer/RenderBlocks/func_102027_b (Lnet/minecraft/block/Block;IIIFFF)Z");
+        registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderStandardBlockWithAmbientOcclusionPartial (Lnet/minecraft/block/Block;IIIFFF)Z net/minecraft/client/renderer/RenderBlocks/func_102027_b (Lnet/minecraft/block/Block;IIIFFF)Z");
+        registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderStandardBlockWithColorMultiplier (Lnet/minecraft/block/Block;IIIFFF)Z net/minecraft/client/renderer/RenderBlocks/func_78609_c (Lnet/minecraft/block/Block;IIIFFF)Z");
+
+        //TODO : Fix Mapping mismatching
         registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/renderBlockLiquid (Lnet/minecraft/block/Block;III)Z net/minecraft/client/renderer/RenderBlocks/func_147721_p (Lnet/minecraft/block/Block;III)Z");
+
         registerSrgName("MD: net/minecraft/client/renderer/RenderBlocks/getAoBrightness (IIII)I net/minecraft/client/renderer/RenderBlocks/func_147778_a (IIII)I");
 
         // RendererLivingEntity
@@ -109,7 +112,7 @@ public class NameMapper {
         registerSrgName("MD: net/minecraft/world/World/getLightBrightnessForSkyBlocks (IIII)I net/minecraft/world/World/func_72802_i (IIII)I");
         registerSrgName("MD: net/minecraft/world/World/getLightBrightness (III)F net/minecraft/world/World/func_72801_o (III)F");
         registerSrgName("MD: net/minecraft/world/World/computeLightValue (IIILnet/minecraft/world/EnumSkyBlock;)I net/minecraft/world/World/func_98179_a (IIILnet/minecraft/world/EnumSkyBlock;)I");
-        registerSrgName("MD: net/minecraft/world/World/updateLightByType (Lnet/minecraft/world/EnumSkyBlock;III)Z net/minecraft/world/World/func_147463_c (Lnet/minecraft/world/EnumSkyBlock;III)Z");
+        registerSrgName("MD: net/minecraft/world/World/updateLightByType (Lnet/minecraft/world/EnumSkyBlock;III)V net/minecraft/world/World/func_72936_c (Lnet/minecraft/world/EnumSkyBlock;III)V");
 
         // NetHandlerPlayServer
         registerSrgName("CL: net/minecraft/network/NetHandlerPlayServer net/minecraft/network/NetHandlerPlayServer");

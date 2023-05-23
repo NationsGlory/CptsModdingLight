@@ -164,13 +164,13 @@ public class CLWorldHelper {
         }
     }
 
-    public static boolean updateLightByType(World world, EnumSkyBlock par1Enu, int par_x, int par_y, int par_z) {
-        return CLWorldHelper.updateLightByType_withIncrement(world, par1Enu, par_x, par_y, par_z, true, par_x, par_y, par_z);
+    public static void updateLightByType(World world, EnumSkyBlock par1Enu, int par_x, int par_y, int par_z) {
+        CLWorldHelper.updateLightByType_withIncrement(world, par1Enu, par_x, par_y, par_z, true, par_x, par_y, par_z);
     }
 
-    public static boolean updateLightByType_withIncrement(World world, EnumSkyBlock par1Enu, int par_x, int par_y, int par_z, boolean shouldIncrement, int rel_x, int rel_y, int rel_z) {
+    public static void updateLightByType_withIncrement(World world, EnumSkyBlock par1Enu, int par_x, int par_y, int par_z, boolean shouldIncrement, int rel_x, int rel_y, int rel_z) {
         if (!world.pipe.doChunksNearChunkExist(par_x, par_y, par_z, 17)) {
-            return false;
+            return;
         } else {
 
             if (shouldIncrement) {
@@ -430,7 +430,6 @@ public class CLWorldHelper {
             }
 
             world.theProfiler.endSection();
-            return true;
         }
     }
 
