@@ -23,7 +23,7 @@ public abstract class SelectiveTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (bytes != null && transforms(transformedName)) {
-            CLLog.log(Level.INFO, "Class {} is a candidate for transforming", transformedName);
+            CLLog.log(Level.INFO, "Class " + transformedName + " is a candidate for transforming");
 
             try {
                 ClassNode clazz = ASMUtils.getClassNode(bytes);

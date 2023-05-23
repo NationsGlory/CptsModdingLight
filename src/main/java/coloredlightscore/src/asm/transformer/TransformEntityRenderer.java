@@ -16,7 +16,7 @@ public class TransformEntityRenderer extends HelperMethodTransformer {
     // These methods will be replaced by statics in CLRenderBlocksHelper
     String methodsToReplace[] = { "updateLightmap (F)V", "enableLightmap (D)V", "disableLightmap (D)V" };
 
-    String entityRendererConstructor = "<init> (Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/resources/IResourceManager;)V";
+    String entityRendererConstructor = "<init> (Lnet/minecraft/client/Minecraft;)V";
     String oldLightmapDesc = "net/minecraft/client/renderer/texture/DynamicTexture";
     String obfOldLightmapDesc = "net/minecraft/client/renderer/texture/DynamicTexture";
     
@@ -112,6 +112,9 @@ public class TransformEntityRenderer extends HelperMethodTransformer {
                 }
             }
         }
+
+        System.out.println("SWAGED ? " + found2DLightmap);
+
         return found2DLightmap;
     }
     

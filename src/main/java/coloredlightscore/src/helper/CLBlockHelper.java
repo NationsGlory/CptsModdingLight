@@ -14,7 +14,7 @@ public class CLBlockHelper {
     }
 
     public static float getBlockAmbientOcclusionLightValue(IBlockAccess iBlockAccess, int x, int y, int z) {
-        Block block =  Block.blocksList[iBlockAccess.getBlockId(x,y,z)];
+        Block block = Block.blocksList[iBlockAccess.getBlockId(x, y, z)];
 
         return block != null ? block.getAmbientOcclusionLightValue(iBlockAccess, x, y, z) : 1.0f;
     }
@@ -39,21 +39,25 @@ public class CLBlockHelper {
 
     public static int getMixedBrightnessForBlockWithColor(IBlockAccess blockAccess, int x, int y, int z) {
         int l;
-        Block block = getBlock(blockAccess, x, y, z);
+
+        int blockID = blockAccess.getBlockId(x, y, z);
+
         if (blockAccess instanceof World)
-            l = CLWorldHelper.getLightBrightnessForSkyBlocks((World) blockAccess, x, y, z, block.getLightValue(blockAccess, x, y, z));
+            l = CLWorldHelper.getLightBrightnessForSkyBlocks((World) blockAccess, x, y, z, Block.lightValue[blockID]);
         else if (blockAccess instanceof ChunkCache)
-            l = CLChunkCacheHelper.getLightBrightnessForSkyBlocks((ChunkCache) blockAccess, x, y, z, block.getLightValue(blockAccess, x, y, z));
+            l = CLChunkCacheHelper.getLightBrightnessForSkyBlocks((ChunkCache) blockAccess, x, y, z, Block.lightValue[blockID]);
         else
             l = 0;
+
+        Block block = Block.blocksList[blockID];
 
         if (l == 0 && block instanceof BlockHalfSlab) {
             --y;
             block = getBlock(blockAccess, x, y, z);
             if (blockAccess instanceof World)
-                return CLWorldHelper.getLightBrightnessForSkyBlocks((World) blockAccess, x, y, z, block.getLightValue(blockAccess, x, y, z));
+                return CLWorldHelper.getLightBrightnessForSkyBlocks((World) blockAccess, x, y, z, Block.lightValue[blockID]);
             else if (blockAccess instanceof ChunkCache)
-                return CLChunkCacheHelper.getLightBrightnessForSkyBlocks((ChunkCache) blockAccess, x, y, z, block.getLightValue(blockAccess, x, y, z));
+                return CLChunkCacheHelper.getLightBrightnessForSkyBlocks((ChunkCache) blockAccess, x, y, z, Block.lightValue[blockID]);
             else
                 return 0;
         } else {

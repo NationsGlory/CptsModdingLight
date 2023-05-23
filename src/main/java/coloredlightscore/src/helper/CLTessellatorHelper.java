@@ -55,14 +55,13 @@ public class CLTessellatorHelper {
         GL20.glShaderSource(vertShader, vertSource);
         GL20.glShaderSource(fragShader, fragSource);
 
-
         GL20.glCompileShader(vertShader);
         infoStr = GL20.glGetShaderInfoLog(vertShader, 2000);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
             CLLog.log(Level.SEVERE, vertSource);
             CLLog.log(Level.SEVERE, "Compiling vertShader");
             CLLog.log(Level.SEVERE, infoStr);
-        } else if (infoStr != "") {
+        } else if (!infoStr.equals("")) {
             CLLog.info(vertSource);
             CLLog.info("Compiling vertShader");
             CLLog.info(infoStr);
@@ -74,7 +73,7 @@ public class CLTessellatorHelper {
             CLLog.log(Level.SEVERE, fragSource);
             CLLog.log(Level.SEVERE, "Compiling fragShader");
             CLLog.log(Level.SEVERE, infoStr);
-        } else if (infoStr != "") {
+        } else if (!infoStr.equals("")) {
             CLLog.info(fragSource);
             CLLog.info("Compiling fragShader");
             CLLog.info(infoStr);
@@ -93,10 +92,12 @@ public class CLTessellatorHelper {
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
             CLLog.log(Level.SEVERE, "Linking Program");
             CLLog.log(Level.SEVERE, infoStr);
-        } else if (infoStr != "") {
+        } else if (!infoStr.equals("")) {
             CLLog.info("Linking Program");
             CLLog.info(infoStr);
         }
+
+
         GL20.glDetachShader(clProgram, vertShader);
         GL20.glDetachShader(clProgram, fragShader);
         if (GL11.glGetError() != GL11.GL_NO_ERROR) {
