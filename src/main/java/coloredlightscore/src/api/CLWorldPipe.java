@@ -1,6 +1,5 @@
 package coloredlightscore.src.api;
 
-import coloredlightscore.src.helper.CLBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -34,7 +33,7 @@ public class CLWorldPipe {
     }
 
     public Block getBlock(int x, int y, int z) {
-        return CLBlockHelper.getBlock(world, x, y, z);
+        return Block.blocksList[world.getBlockId(x, y, z)];
     }
 
     public Chunk getChunkFromChunkCoords(int x, int z) {

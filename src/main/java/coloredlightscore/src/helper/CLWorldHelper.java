@@ -98,7 +98,7 @@ public class CLWorldHelper {
         if (par1Enu == EnumSkyBlock.Sky && world.pipe.canBlockSeeTheSky(par_x, par_y, par_z)) {
             return 15;
         } else {
-            Block block = CLBlockHelper.getBlock(world, par_x, par_y, par_z);
+            Block block = world.pipe.getBlock(par_x, par_y, par_z);
 
             int currentLight = 0;
             if (par1Enu != EnumSkyBlock.Sky) {
@@ -169,10 +169,7 @@ public class CLWorldHelper {
     }
 
     public static void updateLightByType_withIncrement(World world, EnumSkyBlock par1Enu, int par_x, int par_y, int par_z, boolean shouldIncrement, int rel_x, int rel_y, int rel_z) {
-        if (!world.pipe.doChunksNearChunkExist(par_x, par_y, par_z, 17)) {
-            return;
-        } else {
-
+        if (world.pipe.doChunksNearChunkExist(par_x, par_y, par_z, 17)) {
             if (shouldIncrement) {
                 //Increment the updateFlag ONLY on a fresh call... This keeps the updateFlag consistent when the algorithm recurses
                 // if ((flag_entry != updateFlag) && (flag_entry != updateFlag+1)) { // Light has not been visited by the algorithm yet

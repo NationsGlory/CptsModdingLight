@@ -9,16 +9,6 @@ import net.minecraft.world.World;
 
 public class CLBlockHelper {
 
-    public static Block getBlock(IBlockAccess iBlockAccess, int x, int y, int z) {
-        return Block.blocksList[iBlockAccess.getBlockId(x, y, z)];
-    }
-
-    public static float getBlockAmbientOcclusionLightValue(IBlockAccess iBlockAccess, int x, int y, int z) {
-        Block block = Block.blocksList[iBlockAccess.getBlockId(x, y, z)];
-
-        return block != null ? block.getAmbientOcclusionLightValue(iBlockAccess, x, y, z) : 1.0f;
-    }
-
     public static Block setLightValue(Block interceptedReturnValue, Block instance, float par1) {
         // Clamp negative values
         if (par1 < 0.0F) {
@@ -53,7 +43,6 @@ public class CLBlockHelper {
 
         if (l == 0 && block instanceof BlockHalfSlab) {
             --y;
-            block = getBlock(blockAccess, x, y, z);
             if (blockAccess instanceof World)
                 return CLWorldHelper.getLightBrightnessForSkyBlocks((World) blockAccess, x, y, z, Block.lightValue[blockID]);
             else if (blockAccess instanceof ChunkCache)

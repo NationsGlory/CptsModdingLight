@@ -62,10 +62,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessYZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessYZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
             instance.aoBrightnessXYPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
-            instance.aoLightValueScratchXYNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchYZNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchYZNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
-            instance.aoLightValueScratchXYPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
+            instance.aoLightValueScratchXYNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
+            instance.aoLightValueScratchYZNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
+            instance.aoLightValueScratchYZNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
+            instance.aoLightValueScratchXYPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
             isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x + 1, y, z)];
             isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x - 1, y, z)];
             isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z + 1)];
@@ -75,7 +75,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXYNN;
                 instance.aoBrightnessXYZNNN = instance.aoBrightnessXYNN;
             } else {
-                instance.aoLightValueScratchXYZNNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z - 1);
+                instance.aoLightValueScratchXYZNNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z - 1);
                 instance.aoBrightnessXYZNNN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z - 1);
             }
 
@@ -83,7 +83,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXYNN;
                 instance.aoBrightnessXYZNNP = instance.aoBrightnessXYNN;
             } else {
-                instance.aoLightValueScratchXYZNNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z + 1);
+                instance.aoLightValueScratchXYZNNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z + 1);
                 instance.aoBrightnessXYZNNP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z + 1);
             }
 
@@ -91,7 +91,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXYPN;
                 instance.aoBrightnessXYZPNN = instance.aoBrightnessXYPN;
             } else {
-                instance.aoLightValueScratchXYZPNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z - 1);
+                instance.aoLightValueScratchXYZPNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z - 1);
                 instance.aoBrightnessXYZPNN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z - 1);
             }
 
@@ -99,7 +99,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNP = instance.aoLightValueScratchXYPN;
                 instance.aoBrightnessXYZPNP = instance.aoBrightnessXYPN;
             } else {
-                instance.aoLightValueScratchXYZPNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z + 1);
+                instance.aoLightValueScratchXYZPNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z + 1);
                 instance.aoBrightnessXYZPNP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z + 1);
             }
 
@@ -113,7 +113,7 @@ public class CLRenderBlocksHelper {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
+            normalAoValue = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
             topLeftAoLightValue = (instance.aoLightValueScratchXYZNNP + instance.aoLightValueScratchXYNN + instance.aoLightValueScratchYZNP + normalAoValue) / 4.0F;
             topRightAoLightValue = (instance.aoLightValueScratchYZNP + normalAoValue + instance.aoLightValueScratchXYZPNP + instance.aoLightValueScratchXYPN) / 4.0F;
             bottomRightAoLightValue = (normalAoValue + instance.aoLightValueScratchYZNN + instance.aoLightValueScratchXYPN + instance.aoLightValueScratchXYZPNN) / 4.0F;
@@ -159,10 +159,10 @@ public class CLRenderBlocksHelper {
             instance.aoBrightnessXYPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             instance.aoBrightnessYZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessYZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
-            instance.aoLightValueScratchXYNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchXYPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
-            instance.aoLightValueScratchYZPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchYZPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
+            instance.aoLightValueScratchXYNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
+            instance.aoLightValueScratchXYPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
+            instance.aoLightValueScratchYZPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
+            instance.aoLightValueScratchYZPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
             isAirish1P = Block.canBlockGrass[instance.blockAccess.getBlockId(x + 1, y, z)];
             isAirish1N = Block.canBlockGrass[instance.blockAccess.getBlockId(x - 1, y, z)];
             isAirish2P = Block.canBlockGrass[instance.blockAccess.getBlockId(x, y, z + 1)];
@@ -172,7 +172,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXYNP;
                 instance.aoBrightnessXYZNPN = instance.aoBrightnessXYNP;
             } else {
-                instance.aoLightValueScratchXYZNPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z - 1);
+                instance.aoLightValueScratchXYZNPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z - 1);
                 instance.aoBrightnessXYZNPN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z - 1);
             }
 
@@ -180,7 +180,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPN = instance.aoLightValueScratchXYPP;
                 instance.aoBrightnessXYZPPN = instance.aoBrightnessXYPP;
             } else {
-                instance.aoLightValueScratchXYZPPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z - 1);
+                instance.aoLightValueScratchXYZPPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z - 1);
                 instance.aoBrightnessXYZPPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z - 1);
             }
 
@@ -188,7 +188,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPP = instance.aoLightValueScratchXYNP;
                 instance.aoBrightnessXYZNPP = instance.aoBrightnessXYNP;
             } else {
-                instance.aoLightValueScratchXYZNPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z + 1);
+                instance.aoLightValueScratchXYZNPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z + 1);
                 instance.aoBrightnessXYZNPP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z + 1);
             }
 
@@ -196,7 +196,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPP = instance.aoLightValueScratchXYPP;
                 instance.aoBrightnessXYZPPP = instance.aoBrightnessXYPP;
             } else {
-                instance.aoLightValueScratchXYZPPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z + 1);
+                instance.aoLightValueScratchXYZPPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z + 1);
                 instance.aoBrightnessXYZPPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z + 1);
             }
 
@@ -210,7 +210,7 @@ public class CLRenderBlocksHelper {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
+            normalAoValue = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
             topRightAoLightValue = (instance.aoLightValueScratchXYZNPP + instance.aoLightValueScratchXYNP + instance.aoLightValueScratchYZPP + normalAoValue) / 4.0F;
             topLeftAoLightValue = (instance.aoLightValueScratchYZPP + normalAoValue + instance.aoLightValueScratchXYZPPP + instance.aoLightValueScratchXYPP) / 4.0F;
             bottomLeftAoLightValue = (normalAoValue + instance.aoLightValueScratchYZPN + instance.aoLightValueScratchXYPP + instance.aoLightValueScratchXYZPPN) / 4.0F;
@@ -246,10 +246,10 @@ public class CLRenderBlocksHelper {
                 --z;
             }
 
-            instance.aoLightValueScratchXZNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchYZNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchYZPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
-            instance.aoLightValueScratchXZPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
+            instance.aoLightValueScratchXZNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
+            instance.aoLightValueScratchYZNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
+            instance.aoLightValueScratchYZPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXZPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
             instance.aoBrightnessXZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z);
             instance.aoBrightnessYZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessYZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z);
@@ -263,7 +263,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNNN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y - 1, z);
+                instance.aoLightValueScratchXYZNNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y - 1, z);
                 instance.aoBrightnessXYZNNN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y - 1, z);
             }
 
@@ -271,7 +271,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNPN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y + 1, z);
+                instance.aoLightValueScratchXYZNPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y + 1, z);
                 instance.aoBrightnessXYZNPN = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y + 1, z);
             }
 
@@ -279,7 +279,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPNN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y - 1, z);
+                instance.aoLightValueScratchXYZPNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y - 1, z);
                 instance.aoBrightnessXYZPNN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y - 1, z);
             }
 
@@ -287,7 +287,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPPN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y + 1, z);
+                instance.aoLightValueScratchXYZPPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y + 1, z);
                 instance.aoBrightnessXYZPPN = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y + 1, z);
             }
 
@@ -301,7 +301,7 @@ public class CLRenderBlocksHelper {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             }
 
-            normalAoValue = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
+            normalAoValue = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
             topLeftAoLightValue = (instance.aoLightValueScratchXZNN + instance.aoLightValueScratchXYZNPN + normalAoValue + instance.aoLightValueScratchYZPN) / 4.0F;
             bottomLeftAoLightValue = (normalAoValue + instance.aoLightValueScratchYZPN + instance.aoLightValueScratchXZPN + instance.aoLightValueScratchXYZPPN) / 4.0F;
             bottomRightAoLightValue = (instance.aoLightValueScratchYZNN + normalAoValue + instance.aoLightValueScratchXYZPNN + instance.aoLightValueScratchXZPN) / 4.0F;
@@ -361,10 +361,10 @@ public class CLRenderBlocksHelper {
                 ++z;
             }
 
-            instance.aoLightValueScratchXZNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
-            instance.aoLightValueScratchXZPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
-            instance.aoLightValueScratchYZNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchYZPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXZNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
+            instance.aoLightValueScratchXZPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
+            instance.aoLightValueScratchYZNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
+            instance.aoLightValueScratchYZPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
             instance.aoBrightnessXZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z);
             instance.aoBrightnessXZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             instance.aoBrightnessYZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
@@ -378,7 +378,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNNP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y - 1, z);
+                instance.aoLightValueScratchXYZNNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y - 1, z);
                 instance.aoBrightnessXYZNNP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y - 1, z);
             }
 
@@ -386,7 +386,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNPP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y + 1, z);
+                instance.aoLightValueScratchXYZNPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y + 1, z);
                 instance.aoBrightnessXYZNPP = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y + 1, z);
             }
 
@@ -394,7 +394,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPNP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y - 1, z);
+                instance.aoLightValueScratchXYZPNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y - 1, z);
                 instance.aoBrightnessXYZPNP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y - 1, z);
             }
 
@@ -402,7 +402,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPPP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y + 1, z);
+                instance.aoLightValueScratchXYZPPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y + 1, z);
                 instance.aoBrightnessXYZPPP = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y + 1, z);
             }
 
@@ -416,7 +416,7 @@ public class CLRenderBlocksHelper {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
             }
 
-            normalAoValue = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
+            normalAoValue = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
             topLeftAoLightValue = (instance.aoLightValueScratchXZNP + instance.aoLightValueScratchXYZNPP + normalAoValue + instance.aoLightValueScratchYZPP) / 4.0F;
             topRightAoLightValue = (normalAoValue + instance.aoLightValueScratchYZPP + instance.aoLightValueScratchXZPP + instance.aoLightValueScratchXYZPPP) / 4.0F;
             bottomRightAoLightValue = (instance.aoLightValueScratchYZNP + normalAoValue + instance.aoLightValueScratchXYZPNP + instance.aoLightValueScratchXZPP) / 4.0F;
@@ -476,10 +476,10 @@ public class CLRenderBlocksHelper {
                 --x;
             }
 
-            instance.aoLightValueScratchXYNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchXZNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchXZNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
-            instance.aoLightValueScratchXYNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXYNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
+            instance.aoLightValueScratchXZNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
+            instance.aoLightValueScratchXZNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
+            instance.aoLightValueScratchXYNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
             instance.aoBrightnessXYNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessXZNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessXZNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
@@ -493,7 +493,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNNN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z - 1);
+                instance.aoLightValueScratchXYZNNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z - 1);
                 instance.aoBrightnessXYZNNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z - 1);
             }
 
@@ -501,7 +501,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNNP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNNP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z + 1);
+                instance.aoLightValueScratchXYZNNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z + 1);
                 instance.aoBrightnessXYZNNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z + 1);
             }
 
@@ -509,7 +509,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPN = instance.aoLightValueScratchXZNN;
                 instance.aoBrightnessXYZNPN = instance.aoBrightnessXZNN;
             } else {
-                instance.aoLightValueScratchXYZNPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z - 1);
+                instance.aoLightValueScratchXYZNPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z - 1);
                 instance.aoBrightnessXYZNPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z - 1);
             }
 
@@ -517,7 +517,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZNPP = instance.aoLightValueScratchXZNP;
                 instance.aoBrightnessXYZNPP = instance.aoBrightnessXZNP;
             } else {
-                instance.aoLightValueScratchXYZNPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z + 1);
+                instance.aoLightValueScratchXYZNPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z + 1);
                 instance.aoBrightnessXYZNPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z + 1);
             }
 
@@ -531,7 +531,7 @@ public class CLRenderBlocksHelper {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x - 1, y, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
+            normalAoValue = block.getAmbientOcclusionLightValue(instance.blockAccess,x - 1, y, z);
             topRightAoLightValue = (instance.aoLightValueScratchXYNN + instance.aoLightValueScratchXYZNNP + normalAoValue + instance.aoLightValueScratchXZNP) / 4.0F;
             topLeftAoLightValue = (normalAoValue + instance.aoLightValueScratchXZNP + instance.aoLightValueScratchXYNP + instance.aoLightValueScratchXYZNPP) / 4.0F;
             bottomLeftAoLightValue = (instance.aoLightValueScratchXZNN + normalAoValue + instance.aoLightValueScratchXYZNPN + instance.aoLightValueScratchXYNP) / 4.0F;
@@ -591,10 +591,10 @@ public class CLRenderBlocksHelper {
                 ++x;
             }
 
-            instance.aoLightValueScratchXYPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
-            instance.aoLightValueScratchXZPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
-            instance.aoLightValueScratchXZPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
-            instance.aoLightValueScratchXYPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
+            instance.aoLightValueScratchXYPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z);
+            instance.aoLightValueScratchXZPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z - 1);
+            instance.aoLightValueScratchXZPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y, z + 1);
+            instance.aoLightValueScratchXYPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z);
             instance.aoBrightnessXYPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z);
             instance.aoBrightnessXZPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z - 1);
             instance.aoBrightnessXZPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y, z + 1);
@@ -608,7 +608,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPNN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPNN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z - 1);
+                instance.aoLightValueScratchXYZPNN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z - 1);
                 instance.aoBrightnessXYZPNN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z - 1);
             }
 
@@ -616,7 +616,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPNP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPNP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPNP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z + 1);
+                instance.aoLightValueScratchXYZPNP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y - 1, z + 1);
                 instance.aoBrightnessXYZPNP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y - 1, z + 1);
             }
 
@@ -624,7 +624,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPN = instance.aoLightValueScratchXZPN;
                 instance.aoBrightnessXYZPPN = instance.aoBrightnessXZPN;
             } else {
-                instance.aoLightValueScratchXYZPPN = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z - 1);
+                instance.aoLightValueScratchXYZPPN = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z - 1);
                 instance.aoBrightnessXYZPPN = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z - 1);
             }
 
@@ -632,7 +632,7 @@ public class CLRenderBlocksHelper {
                 instance.aoLightValueScratchXYZPPP = instance.aoLightValueScratchXZPP;
                 instance.aoBrightnessXYZPPP = instance.aoBrightnessXZPP;
             } else {
-                instance.aoLightValueScratchXYZPPP = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z + 1);
+                instance.aoLightValueScratchXYZPPP = block.getAmbientOcclusionLightValue(instance.blockAccess,x, y + 1, z + 1);
                 instance.aoBrightnessXYZPPP = block.getMixedBrightnessForBlock(instance.blockAccess, x, y + 1, z + 1);
             }
 
@@ -646,7 +646,7 @@ public class CLRenderBlocksHelper {
                 brightnessScratchValue = block.getMixedBrightnessForBlock(instance.blockAccess, x + 1, y, z);
             }
 
-            normalAoValue = CLBlockHelper.getBlockAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
+            normalAoValue = block.getAmbientOcclusionLightValue(instance.blockAccess,x + 1, y, z);
             topLeftAoLightValue = (instance.aoLightValueScratchXYPN + instance.aoLightValueScratchXYZPNP + normalAoValue + instance.aoLightValueScratchXZPP) / 4.0F;
             bottomLeftAoLightValue = (instance.aoLightValueScratchXYZPNN + instance.aoLightValueScratchXYPN + instance.aoLightValueScratchXZPN + normalAoValue) / 4.0F;
             bottomRightAoLightValue = (instance.aoLightValueScratchXZPN + normalAoValue + instance.aoLightValueScratchXYZPPN + instance.aoLightValueScratchXYPP) / 4.0F;
